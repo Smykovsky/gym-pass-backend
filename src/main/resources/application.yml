@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: gym-pass-backend
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: gym-pass
+
+
+SECRET_KEY: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+ACCESS_TOKEN:
+  EXPIRATION: 86400000
+REFRESH-TOKEN:
+  EXPIRATION: 604800000
