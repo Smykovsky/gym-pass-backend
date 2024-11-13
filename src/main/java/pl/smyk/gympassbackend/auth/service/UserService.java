@@ -2,6 +2,7 @@ package pl.smyk.gympassbackend.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ import pl.smyk.gympassbackend.auth.dto.response.AuthResponse;
 import pl.smyk.gympassbackend.auth.model.Role;
 import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.repository.UserRepository;
+import pl.smyk.gympassbackend.gymPass.model.Membership;
+import pl.smyk.gympassbackend.gymPass.repository.MembershipRepository;
+import pl.smyk.gympassbackend.gymPass.util.CodeGenerator;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +24,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final MembershipRepository membershipRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final CodeGenerator codeGenerator;
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -33,27 +39,40 @@ public class UserService {
                 .email(registerRequest.getEmail())
                 .username(registerRequest.getUsername())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .barCode(null)
-                .qrCode(null)
                 .roles(List.of(Role.USER))
                 .build();
 
         var savedUser = userRepository.save(user);
 
+        Membership membership = new Membership();
+        membership.generateCodes(codeGenerator);
+        membershipRepository.save(membership);
+
+        savedUser.setMembership(membership);
+        userRepository.save(savedUser);
+
         return savedUser.getEmail();
     }
 
     public AuthResponse login(LoginRequest loginRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(), loginRequest.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(), loginRequest.getPassword()
+                    )
+            );
 
-        var user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow();
-        var jwtToken = jwtUtil.generateToken(user);
-        var refreshToken = jwtUtil.generateRefreshToken(user);
-        return new AuthResponse(jwtToken, refreshToken);
+            var user = userRepository.findByEmail(loginRequest.getEmail())
+                    .orElseThrow(() -> new RuntimeException("Nie znaleziono użytkownika o podanym adresie email!"));
+
+            var jwtToken = jwtUtil.generateToken(user);
+            var refreshToken = jwtUtil.generateRefreshToken(user);
+
+            return new AuthResponse(jwtToken, refreshToken);
+        } catch (BadCredentialsException e) {
+            throw new RuntimeException("Podane poświadczenia są nie prawdiłowe!", e);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Błąd podczas logowania: " + e.getMessage(), e);
+        }
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import pl.smyk.gympassbackend.auth.config.jwt.JwtAuthFilter;
 
-import static pl.smyk.gympassbackend.auth.model.Role.ADMIN;
+import static pl.smyk.gympassbackend.auth.model.Role.*;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +30,9 @@ public class SecurityConfig{
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**")
                 .permitAll()
-                .requestMatchers("/api/admin").hasAnyRole(ADMIN.name())
+                .requestMatchers("/api/receptionist/**").hasAnyRole(RECEPTIONIST.name())
+                .requestMatchers("/api/trainer/**").hasAnyRole(TRAINER.name())
+                .requestMatchers("/api/admin/**").hasAnyRole(ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()

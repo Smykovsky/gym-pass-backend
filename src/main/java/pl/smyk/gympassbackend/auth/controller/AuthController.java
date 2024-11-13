@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.smyk.gympassbackend.auth.dto.request.LoginRequest;
 import pl.smyk.gympassbackend.auth.dto.request.RegisterRequest;
 import pl.smyk.gympassbackend.auth.dto.response.AuthResponse;
-import pl.smyk.gympassbackend.auth.model.Role;
 import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.service.UserService;
 
@@ -30,6 +29,11 @@ public class AuthController {
             return ResponseEntity.status(401).body(responseMap);
         }
 
+        if (userService.findByEmail(registerRequest.getEmail()).isPresent()) {
+            responseMap.put("message", "Użytkownik o takim adresie email już istnieje!");
+            return ResponseEntity.status(401).body(responseMap);
+        }
+
         userService.register(registerRequest);
         responseMap.put("message", "Pomyślnie stworzono użytkownika");
         responseMap.put("User", registerRequest.getUsername());
@@ -40,12 +44,20 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest authRequest) {
         HashMap<String, Object> responseMap = new HashMap<>();
         Optional<User> userByEmail = userService.findByEmail(authRequest.getEmail());
-        if (userByEmail == null) {
-            return ResponseEntity.notFound().build();
+
+        if (userByEmail.isEmpty()) {
+            responseMap.put("message", "Nie znaleziono użytkownika o takim adresie email!");
+            return ResponseEntity.status(401).body(responseMap);
         }
-        AuthResponse tokens = userService.login(authRequest);
-        responseMap.put("zalogowano", authRequest.getEmail());
-        responseMap.put("tokens", tokens);
-        return ResponseEntity.ok(responseMap);
+
+        try {
+            AuthResponse tokens = userService.login(authRequest);
+            responseMap.put("zalogowano", authRequest.getEmail());
+            responseMap.put("tokens", tokens);
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(401).body(responseMap);
+        }
     }
 }

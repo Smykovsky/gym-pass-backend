@@ -1,17 +1,20 @@
 package pl.smyk.gympassbackend.auth.model;
 
+import jakarta.annotation.Nullable;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pl.smyk.gympassbackend.gymPass.model.Membership;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Document("users")
+@Document(collection = "users")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,8 +27,9 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private List<Role> roles;
-    private String barCode;
-    private String qrCode;
+    @DBRef
+    @Nullable
+    private Membership membership;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
