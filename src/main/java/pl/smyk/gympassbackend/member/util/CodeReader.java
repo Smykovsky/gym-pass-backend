@@ -1,4 +1,4 @@
-package pl.smyk.gympassbackend.gymPass.util;
+package pl.smyk.gympassbackend.member.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.zxing.BinaryBitmap;

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import pl.smyk.gympassbackend.gymPass.model.Membership;
+import pl.smyk.gympassbackend.member.model.Membership;
 
 import java.util.ArrayList;
 import java.util.Collection;

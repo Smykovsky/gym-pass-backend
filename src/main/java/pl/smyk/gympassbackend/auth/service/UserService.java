@@ -13,10 +13,11 @@ import pl.smyk.gympassbackend.auth.dto.response.AuthResponse;
 import pl.smyk.gympassbackend.auth.model.Role;
 import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.repository.UserRepository;
-import pl.smyk.gympassbackend.gymPass.model.Membership;
-import pl.smyk.gympassbackend.gymPass.repository.MembershipRepository;
-import pl.smyk.gympassbackend.gymPass.util.CodeGenerator;
+import pl.smyk.gympassbackend.member.model.Membership;
+import pl.smyk.gympassbackend.member.repository.MembershipRepository;
+import pl.smyk.gympassbackend.member.util.CodeGenerator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,10 @@ public class UserService {
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
     }
 
     public String register(RegisterRequest registerRequest) {
