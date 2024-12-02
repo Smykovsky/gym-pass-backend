@@ -35,11 +35,12 @@ public class MembershipService {
         User user = byEmail.get();
         assert user.getMembership() != null;
         Membership membership = user.getMembership();
-        LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().plusMonths(months);
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(months);
 
         membership.setStartDate(start);
         membership.setEndDate(end);
+        membership.setActive(true);
         membership.generateCodes(codeGenerator);
 
         membershipRepository.save(user.getMembership());

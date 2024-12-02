@@ -2,6 +2,7 @@ package pl.smyk.gympassbackend.auth.model;
 
 import jakarta.annotation.Nullable;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -15,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Document(collection = "users")
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

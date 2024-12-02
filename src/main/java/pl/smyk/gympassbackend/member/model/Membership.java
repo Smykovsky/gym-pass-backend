@@ -20,8 +20,8 @@ public class Membership {
     @MongoId
     private String id;
     private boolean active;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String qrCode;
     private String barCode;
     private MembershipType membershipType;

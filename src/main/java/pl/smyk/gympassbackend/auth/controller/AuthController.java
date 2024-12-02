@@ -2,10 +2,7 @@ package pl.smyk.gympassbackend.auth.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.smyk.gympassbackend.auth.dto.request.LoginRequest;
 import pl.smyk.gympassbackend.auth.dto.request.RegisterRequest;
 import pl.smyk.gympassbackend.auth.dto.response.AuthResponse;
@@ -59,5 +56,11 @@ public class AuthController {
             responseMap.put("message", e.getMessage());
             return ResponseEntity.status(401).body(responseMap);
         }
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<?> getUser(@PathVariable String email) {
+        User user = userService.findByEmail(email).get();
+        return ResponseEntity.ok(user);
     }
 }
