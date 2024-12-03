@@ -1,14 +1,13 @@
 package pl.smyk.gympassbackend.atrainer.model;
 
-import lombok.Builder;
+import jakarta.annotation.Nullable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.TypeAlias;
-import pl.smyk.gympassbackend.auth.model.Role;
 import pl.smyk.gympassbackend.auth.model.User;
-import pl.smyk.gympassbackend.member.model.Membership;
 
 import java.util.List;
 
@@ -16,7 +15,13 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Trainer extends User {
+    @Nullable
     private List<String> certifications;
-    private String specialization;
+    @Nullable
+    private List<User> mentees;
+    @Nullable
+    private List<ScheduledTraining> scheduledTrainings;
 }
