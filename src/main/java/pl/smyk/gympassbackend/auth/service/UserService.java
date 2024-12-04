@@ -6,6 +6,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.smyk.gympassbackend.auth.config.jwt.JwtUtil;
 import pl.smyk.gympassbackend.auth.dto.request.LoginRequest;
 import pl.smyk.gympassbackend.auth.dto.request.RegisterRequest;
@@ -17,7 +18,6 @@ import pl.smyk.gympassbackend.member.model.Membership;
 import pl.smyk.gympassbackend.member.repository.MembershipRepository;
 import pl.smyk.gympassbackend.member.util.CodeGenerator;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +39,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public String register(RegisterRequest registerRequest) {
         var user = User.builder()
                 .email(registerRequest.getEmail())
@@ -50,7 +51,7 @@ public class UserService {
         var savedUser = userRepository.save(user);
 
         Membership membership = new Membership();
-        membership.generateCodes(codeGenerator);
+        membership.generateCodes(codeGenerator, user.getId());
         membershipRepository.save(membership);
 
         savedUser.setMembership(membership);

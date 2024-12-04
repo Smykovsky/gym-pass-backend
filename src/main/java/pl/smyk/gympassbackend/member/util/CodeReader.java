@@ -1,6 +1,5 @@
 package pl.smyk.gympassbackend.member.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
@@ -16,7 +15,7 @@ import java.util.HashMap;
 
 @Service
 public class CodeReader {
-    public static HashMap<String, Object> readCodeFromBase64(String base64String) {
+    public static String readCodeFromBase64(String base64String) {
         try {
             byte[] imageBytes = Base64.getDecoder().decode(base64String);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
@@ -26,14 +25,12 @@ public class CodeReader {
                     new BufferedImageLuminanceSource(bufferedImage)));
             Result result = new MultiFormatReader().decode(bitmap);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-
-            return objectMapper.readValue(result.getText(), HashMap.class);
+            return AESUtils.decrypt(result.getText());
         } catch (Exception e) {
             e.printStackTrace();
             HashMap<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("error", "Błąd podczas odczytu kodu: " + e.getMessage());
-            return errorResponse;
+            return e.getMessage();
         }
     }
 }

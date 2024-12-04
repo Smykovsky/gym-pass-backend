@@ -41,7 +41,7 @@ public class MembershipService {
         membership.setStartDate(start);
         membership.setEndDate(end);
         membership.setActive(true);
-        membership.generateCodes(codeGenerator);
+        membership.generateCodes(codeGenerator, user.getId());
 
         membershipRepository.save(user.getMembership());
 

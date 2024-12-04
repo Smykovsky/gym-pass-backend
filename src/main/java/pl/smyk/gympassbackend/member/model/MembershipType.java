@@ -7,8 +7,8 @@ import lombok.Getter;
 public enum MembershipType {
     MONTHLY(1, 0),
     QUARTERLY(3, 10),
-    SEMI_ANNUAL(6, 15),
-    ANNUAL(12, 20);
+    SEMI_ANNUAL(6, 20),
+    ANNUAL(12, 35);
 
     private static final double PRICE_PER_MONTH = 80.00;
     private final int months;

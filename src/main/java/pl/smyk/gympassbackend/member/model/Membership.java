@@ -8,8 +8,6 @@ import pl.smyk.gympassbackend.member.util.CodeGenerator;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 
 @Document( collection = "memberships")
 @NoArgsConstructor
@@ -27,16 +25,12 @@ public class Membership {
     private MembershipType membershipType;
 
 
-    public void generateCodes(CodeGenerator codeGenerator) {
-        HashMap<String, Object> codeData = new HashMap<>();
-        codeData.put("startDate", startDate);
-        codeData.put("endDate", endDate);
-        codeData.put("isActive", active);
-
+    public void generateCodes(CodeGenerator codeGenerator, String userId) {
         try {
-            this.qrCode = codeGenerator.generateQRCode(codeData);
-//            this.barCode = codeGenerator.generateBarcode(codeData);
+            this.qrCode = codeGenerator.generateQRCode(userId);
         } catch (WriterException | IOException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
