@@ -1,4 +1,4 @@
-package pl.smyk.gympassbackend.payment.dto;
+package pl.smyk.gympassbackend.member.dto;
 
 import lombok.Data;
 import pl.smyk.gympassbackend.member.model.MembershipType;

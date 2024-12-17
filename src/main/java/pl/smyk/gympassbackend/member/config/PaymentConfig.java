@@ -1,4 +1,4 @@
-package pl.smyk.gympassbackend.payment.config;
+package pl.smyk.gympassbackend.member.config;
 
 import com.stripe.Stripe;
 import jakarta.annotation.PostConstruct;

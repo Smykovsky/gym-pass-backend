@@ -1,17 +1,13 @@
-package pl.smyk.gympassbackend.payment.service;
+package pl.smyk.gympassbackend.member.service;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
-import com.stripe.model.Token;
 import com.stripe.param.PaymentIntentConfirmParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.smyk.gympassbackend.member.service.MembershipService;
-import pl.smyk.gympassbackend.payment.dto.CardRequest;
-import pl.smyk.gympassbackend.payment.dto.PaymentConfirmRequest;
-import pl.smyk.gympassbackend.payment.dto.PaymentCreateRequest;
+import pl.smyk.gympassbackend.member.dto.PaymentConfirmRequest;
+import pl.smyk.gympassbackend.member.dto.PaymentCreateRequest;
 
-import java.time.LocalDate;
 import java.util.*;
 
 import static com.stripe.param.PaymentIntentConfirmParams.PaymentMethodData.Type.BLIK;

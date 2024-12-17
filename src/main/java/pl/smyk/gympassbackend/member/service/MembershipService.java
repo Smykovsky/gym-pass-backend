@@ -1,25 +1,21 @@
 package pl.smyk.gympassbackend.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import pl.smyk.gympassbackend.auth.model.User;
-import pl.smyk.gympassbackend.auth.service.UserService;
+import pl.smyk.gympassbackend.auth.service.AuthService;
 import pl.smyk.gympassbackend.member.model.Membership;
 import pl.smyk.gympassbackend.member.repository.MembershipRepository;
 import pl.smyk.gympassbackend.member.util.CodeGenerator;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MembershipService {
     private final MembershipRepository membershipRepository;
-    private final UserService userService;
+    private final AuthService userService;
     private final CodeGenerator codeGenerator;
 
     public void addMembership() {

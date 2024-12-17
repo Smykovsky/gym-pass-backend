@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class AuthService {
     private final UserRepository userRepository;
     private final MembershipRepository membershipRepository;
     private final AuthenticationManager authenticationManager;
@@ -40,7 +40,7 @@ public class UserService {
     }
 
     @Transactional
-    public String register(RegisterRequest registerRequest) {
+    public AuthResponse register(RegisterRequest registerRequest) {
         var user = User.builder()
                 .email(registerRequest.getEmail())
                 .username(registerRequest.getUsername())
@@ -57,7 +57,7 @@ public class UserService {
         savedUser.setMembership(membership);
         userRepository.save(savedUser);
 
-        return savedUser.getEmail();
+        return AuthResponse.builder().message("Rejestracja przebiegła pomyślnie!").build();
     }
 
     public AuthResponse login(LoginRequest loginRequest) {
@@ -74,7 +74,7 @@ public class UserService {
             var jwtToken = jwtUtil.generateToken(user);
             var refreshToken = jwtUtil.generateRefreshToken(user);
 
-            return new AuthResponse(jwtToken, refreshToken);
+            return AuthResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).message("Pomyślnie zalogowano!").build();
         } catch (BadCredentialsException e) {
             throw new RuntimeException("Podane poświadczenia są nie prawdiłowe!", e);
         } catch (RuntimeException e) {

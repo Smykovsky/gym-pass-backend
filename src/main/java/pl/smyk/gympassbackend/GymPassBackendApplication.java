@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import pl.smyk.gympassbackend.atrainer.model.Trainer;
 import pl.smyk.gympassbackend.atrainer.repository.TrainerRepository;
+import pl.smyk.gympassbackend.auth.model.Role;
 import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.repository.UserRepository;
 import pl.smyk.gympassbackend.member.util.AESUtils;
@@ -14,6 +16,7 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 
 
 @SpringBootApplication
@@ -28,19 +31,19 @@ public class GymPassBackendApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        Trainer trainer = Trainer.builder()
-//                .email("trainer@example.com")
-//                .username("trainer1")
-//                .password("hashed_password")
-//                .roles(List.of(Role.TRAINER, Role.USER))
-//                .certifications(List.of("Crossfit", "Dietitian"))
-//                .build();
-//
-//        userRepository.save(trainer);
+        Trainer trainer = Trainer.builder()
+                .email("trainer@example.com")
+                .username("trainer1")
+                .password("hashed_password")
+                .roles(List.of(Role.TRAINER, Role.USER))
+                .certifications(List.of("Crossfit", "Dietitian"))
+                .build();
 
+        userRepository.save(trainer);
+//
 //        Trainer byId = trainerRepository.findById("674f04eb1047ef0c6d3fdff3").orElse(null);
 //        System.out.println(byId.getUsername() + byId.getRoles());
-
+//
 //        String test = "nDzDV1LWqC7LuNJjB6Brl+E9+aQkB8TkGcqG/u4Wj0o=";
 //
 //        String decrypt = AESUtils.decrypt(test);

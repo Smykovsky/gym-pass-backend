@@ -7,7 +7,7 @@ import pl.smyk.gympassbackend.auth.dto.request.LoginRequest;
 import pl.smyk.gympassbackend.auth.dto.request.RegisterRequest;
 import pl.smyk.gympassbackend.auth.dto.response.AuthResponse;
 import pl.smyk.gympassbackend.auth.model.User;
-import pl.smyk.gympassbackend.auth.service.UserService;
+import pl.smyk.gympassbackend.auth.service.AuthService;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -16,23 +16,23 @@ import java.util.Optional;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserService userService;
+    private final AuthService userService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         HashMap<String, Object> responseMap = new HashMap<>();
         if (!registerRequest.getPassword().equals(registerRequest.getPasswordConfirmed())) {
             responseMap.put("message", "Hasła muszą być takie same!");
-            return ResponseEntity.status(401).body(responseMap);
+            return ResponseEntity.status(409).body(responseMap);
         }
 
         if (userService.findByEmail(registerRequest.getEmail()).isPresent()) {
             responseMap.put("message", "Użytkownik o takim adresie email już istnieje!");
-            return ResponseEntity.status(401).body(responseMap);
+            return ResponseEntity.status(409).body(responseMap);
         }
 
-        userService.register(registerRequest);
-        responseMap.put("message", "Pomyślnie stworzono użytkownika");
+        AuthResponse registerResponse = userService.register(registerRequest);
+        responseMap.put("message", registerResponse.getMessage());
         responseMap.put("User", registerRequest.getUsername());
         return ResponseEntity.ok(responseMap);
     }

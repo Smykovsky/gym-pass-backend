@@ -1,4 +1,4 @@
-package pl.smyk.gympassbackend.payment.controller;
+package pl.smyk.gympassbackend.member.controller;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.smyk.gympassbackend.payment.dto.PaymentConfirmRequest;
-import pl.smyk.gympassbackend.payment.dto.PaymentCreateRequest;
-import pl.smyk.gympassbackend.payment.service.PaymentService;
+import pl.smyk.gympassbackend.member.dto.PaymentConfirmRequest;
+import pl.smyk.gympassbackend.member.dto.PaymentCreateRequest;
+import pl.smyk.gympassbackend.member.service.PaymentService;
 
 @RestController
 @RequestMapping("/api/payment")
