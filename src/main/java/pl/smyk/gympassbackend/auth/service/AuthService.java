@@ -11,6 +11,7 @@ import pl.smyk.gympassbackend.auth.config.jwt.JwtUtil;
 import pl.smyk.gympassbackend.auth.dto.request.LoginRequest;
 import pl.smyk.gympassbackend.auth.dto.request.RegisterRequest;
 import pl.smyk.gympassbackend.auth.dto.response.AuthResponse;
+import pl.smyk.gympassbackend.auth.dto.response.UserDataResponse;
 import pl.smyk.gympassbackend.auth.model.Role;
 import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.repository.UserRepository;
@@ -80,5 +81,29 @@ public class AuthService {
         } catch (RuntimeException e) {
             throw new RuntimeException("Błąd podczas logowania: " + e.getMessage(), e);
         }
+    }
+
+    public UserDataResponse getUserData(String email) {
+        if (email.isEmpty()) {
+            return null;
+        }
+
+        Optional<User> byEmail = userRepository.findByEmail(email);
+        if (!byEmail.isPresent()) {
+            return null;
+        }
+
+        User user = byEmail.get();
+        return UserDataResponse.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .membershipData(
+                        UserDataResponse.MembershipData.builder()
+                                .active(user.getMembership().isActive())
+                                .startDate(user.getMembership().getStartDate())
+                                .endDate(user.getMembership().getEndDate())
+                                .qrCode(user.getMembership().getQrCode())
+                                .membershipType(user.getMembership().getMembershipType())
+                                .build()).build();
     }
 }

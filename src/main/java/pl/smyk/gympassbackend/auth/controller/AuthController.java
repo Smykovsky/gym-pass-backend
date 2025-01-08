@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.smyk.gympassbackend.auth.dto.request.LoginRequest;
 import pl.smyk.gympassbackend.auth.dto.request.RegisterRequest;
 import pl.smyk.gympassbackend.auth.dto.response.AuthResponse;
+import pl.smyk.gympassbackend.auth.dto.response.UserDataResponse;
 import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.service.AuthService;
 
@@ -58,9 +59,13 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<?> getUser(@PathVariable String email) {
-        User user = userService.findByEmail(email).get();
-        return ResponseEntity.ok(user);
+    @GetMapping("/user/{email}")
+    public ResponseEntity<?> getUserData(@PathVariable String email) {
+        if (email.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserDataResponse userData = userService.getUserData(email);
+        return ResponseEntity.ok(userData);
     }
 }

@@ -16,10 +16,7 @@ import pl.smyk.gympassbackend.member.util.AESUtils;
 import pl.smyk.gympassbackend.member.util.CodeReader;
 
 import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 @SpringBootApplication
@@ -61,5 +58,8 @@ public class GymPassBackendApplication implements CommandLineRunner {
 //
 //        String decrypt = AESUtils.decrypt(test);
 //        System.out.println(decrypt);
+
+        String encrypted = AESUtils.decrypt("1nyCYKAcV8GSzMhVVhqEvDddeTWwxV9Xk0QS6rdsrr8=");
+        System.out.println(encrypted);
     }
 }

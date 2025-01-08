@@ -18,6 +18,21 @@ public class MembershipService {
     private final AuthService userService;
     private final CodeGenerator codeGenerator;
 
+
+    public Membership getMembershipByEmail(String email) {
+        if (email.isEmpty()) {
+            return null;
+        }
+
+        Optional<User> byEmail = userService.findByEmail(email);
+        if (!byEmail.isPresent()) {
+            return null;
+        }
+
+        User user = byEmail.get();
+        return user.getMembership();
+    }
+
     public void addMembership() {
 
     }
