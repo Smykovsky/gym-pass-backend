@@ -34,7 +34,7 @@ public class AuthController {
 
         AuthResponse registerResponse = userService.register(registerRequest);
         responseMap.put("message", registerResponse.getMessage());
-        responseMap.put("User", registerRequest.getUsername());
+        responseMap.put("User", registerRequest.getEmail());
         return ResponseEntity.ok(responseMap);
     }
 

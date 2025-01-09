@@ -100,7 +100,7 @@ public class PaymentService {
                 String email = paymentIntent.getMetadata().get("user_email");
 
                 if (status.equals("succeeded")) {
-                    membershipService.updateMembership(email, membershipTypeMonths);
+                    membershipService.renewMembership(email, membershipTypeMonths);
                     return "success";
                 } else if (status.equals("in_process")){
                     return "in_process";

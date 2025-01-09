@@ -44,7 +44,8 @@ public class AuthService {
     public AuthResponse register(RegisterRequest registerRequest) {
         var user = User.builder()
                 .email(registerRequest.getEmail())
-                .username(registerRequest.getUsername())
+                .firstName(registerRequest.getFirstName())
+                .lastName(registerRequest.getLastName())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .roles(List.of(Role.USER))
                 .build();
@@ -95,8 +96,9 @@ public class AuthService {
 
         User user = byEmail.get();
         return UserDataResponse.builder()
-                .username(user.getUsername())
                 .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .membershipData(
                         UserDataResponse.MembershipData.builder()
                                 .active(user.getMembership().isActive())

@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.smyk.gympassbackend.member.model.Membership;
+import pl.smyk.gympassbackend.training.model.ScheduledTraining;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,7 +28,8 @@ public class User implements UserDetails {
     @MongoId
     private String id;
     private String email;
-    private String username;
+    private String firstName;
+    private String lastName;
     private String password;
     private List<Role> roles;
     @DBRef

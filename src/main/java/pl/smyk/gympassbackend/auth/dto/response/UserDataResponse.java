@@ -12,7 +12,8 @@ import java.time.LocalDate;
 @Setter
 public class UserDataResponse {
     private String email;
-    private String username;
+    private String firstName;
+    private String lastName;
     private MembershipData membershipData;
 
     @Builder

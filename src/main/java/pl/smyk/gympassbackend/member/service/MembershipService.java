@@ -37,7 +37,7 @@ public class MembershipService {
 
     }
 
-    public void updateMembership(String userEmail, int months) {
+    public void renewMembership(String userEmail, int months) {
         Optional<User> byEmail = userService.findByEmail(userEmail);
         if (byEmail.isEmpty()) {
             return;

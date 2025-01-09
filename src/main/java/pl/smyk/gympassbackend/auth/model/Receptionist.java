@@ -1,4 +1,4 @@
-package pl.smyk.gympassbackend.areceptionist.model;
+package pl.smyk.gympassbackend.auth.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

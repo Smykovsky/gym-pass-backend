@@ -5,18 +5,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.smyk.gympassbackend.areceptionist.model.Receptionist;
-import pl.smyk.gympassbackend.areceptionist.repository.ReceptionistRepository;
-import pl.smyk.gympassbackend.atrainer.model.Trainer;
-import pl.smyk.gympassbackend.atrainer.repository.TrainerRepository;
-import pl.smyk.gympassbackend.auth.model.Role;
-import pl.smyk.gympassbackend.auth.model.User;
+import pl.smyk.gympassbackend.auth.repository.TrainerRepository;
 import pl.smyk.gympassbackend.auth.repository.UserRepository;
-import pl.smyk.gympassbackend.member.util.AESUtils;
-import pl.smyk.gympassbackend.member.util.CodeReader;
-
-import java.security.SecureRandom;
-import java.util.*;
 
 
 @SpringBootApplication
@@ -59,7 +49,8 @@ public class GymPassBackendApplication implements CommandLineRunner {
 //        String decrypt = AESUtils.decrypt(test);
 //        System.out.println(decrypt);
 
-        String encrypted = AESUtils.decrypt("1nyCYKAcV8GSzMhVVhqEvDddeTWwxV9Xk0QS6rdsrr8=");
-        System.out.println(encrypted);
+//        String encrypted = AESUtils.decrypt("1nyCYKAcV8GSzMhVVhqEvDddeTWwxV9Xk0QS6rdsrr8=");
+//        System.out.println(encrypted);
+
     }
 }
