@@ -36,6 +36,7 @@ public class User implements UserDetails {
     @Nullable
     private Membership membership;
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();

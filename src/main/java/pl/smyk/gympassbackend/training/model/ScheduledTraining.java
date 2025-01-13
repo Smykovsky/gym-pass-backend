@@ -2,6 +2,7 @@ package pl.smyk.gympassbackend.training.model;
 
 import jakarta.annotation.Nullable;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.TypeAlias;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 
 @Document("scheduled_trainings")
 @TypeAlias("scheduledTraining")
+@NoArgsConstructor
 @SuperBuilder
 @Getter
 @Setter

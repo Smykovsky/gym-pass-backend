@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface TrainerRepository extends MongoRepository<Trainer, String> {
     Optional<Trainer> findById(String id);
+    Optional<Trainer> findByEmail(String email);
 }
