@@ -37,7 +37,7 @@ public class TrainingController {
             return ResponseEntity.notFound().build();
         }
 
-        ScheduledTrainingDto scheduledTrainingDto = trainingService.sendTrainingRequest(request.getTrainerEmail(), userEmail);
+        ScheduledTrainingDto scheduledTrainingDto = trainingService.sendTrainingRequest(request, userEmail);
         return ResponseEntity.ok(scheduledTrainingDto);
     }
 }

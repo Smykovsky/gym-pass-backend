@@ -2,6 +2,7 @@ package pl.smyk.gympassbackend.training.dto;
 
 import lombok.Data;
 import pl.smyk.gympassbackend.training.model.TrainingStatus;
+import pl.smyk.gympassbackend.training.model.TrainingType;
 
 import java.time.LocalDateTime;
 
@@ -11,5 +12,6 @@ public class ScheduledTrainingDto {
     private LocalDateTime trainingDateTime;
     private String trainerEmail;
     private String userEmail;
+    private TrainingType trainingType;
     private TrainingStatus trainingStatus;
 }

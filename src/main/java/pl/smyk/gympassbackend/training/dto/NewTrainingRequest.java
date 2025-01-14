@@ -4,10 +4,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import pl.smyk.gympassbackend.training.model.TrainingType;
 
 @Getter
 @Setter
 @Data
 public class NewTrainingRequest {
     private String trainerEmail;
+    private TrainingType trainingType;
 }

@@ -11,6 +11,9 @@ import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.repository.TrainerRepository;
 import pl.smyk.gympassbackend.auth.repository.UserRepository;
 import pl.smyk.gympassbackend.auth.service.AuthService;
+import pl.smyk.gympassbackend.member.model.Membership;
+import pl.smyk.gympassbackend.member.repository.MembershipRepository;
+import pl.smyk.gympassbackend.member.util.CodeGenerator;
 import pl.smyk.gympassbackend.training.model.ScheduledTraining;
 import pl.smyk.gympassbackend.training.model.TrainingStatus;
 import pl.smyk.gympassbackend.training.repository.ScheduledTrainingRepository;
@@ -27,7 +30,9 @@ public class GymPassBackendApplication implements CommandLineRunner {
     private final TrainerRepository trainerRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
+    private final CodeGenerator codeGenerator;
     private final ScheduledTrainingRepository scheduledTrainingRepository;
+    private final MembershipRepository membershipRepository;
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     public static void main(String[] args) {
         SpringApplication.run(GymPassBackendApplication.class, args);
@@ -44,7 +49,17 @@ public class GymPassBackendApplication implements CommandLineRunner {
 //                .certifications(List.of("Crossfit", "Dietitian"))
 //                .build();
 //
-//        userRepository.save(trainer);
+//        Trainer saved = userRepository.save(trainer);
+//
+//        Membership membership = new Membership();
+//        membership.generateCodes(codeGenerator, saved.getId());
+//        membershipRepository.save(membership);
+//
+//        saved.setMembership(membership);
+//
+//        userRepository.save(saved);
+
+
 //
 //        Receptionist receptionist = Receptionist.builder()
 //                .email("receptioning@example.com")

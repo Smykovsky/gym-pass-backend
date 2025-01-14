@@ -28,5 +28,6 @@ public class ScheduledTraining {
     private Trainer trainer;
     @DBRef
     private User user;
+    private TrainingType trainingType;
     private TrainingStatus trainingStatus;
 }

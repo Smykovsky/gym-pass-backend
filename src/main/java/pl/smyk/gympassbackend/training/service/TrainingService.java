@@ -6,6 +6,7 @@ import pl.smyk.gympassbackend.auth.model.Trainer;
 import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.repository.TrainerRepository;
 import pl.smyk.gympassbackend.auth.service.AuthService;
+import pl.smyk.gympassbackend.training.dto.NewTrainingRequest;
 import pl.smyk.gympassbackend.training.dto.ScheduledTrainingDto;
 import pl.smyk.gympassbackend.training.mapper.ScheduledTrainingMapper;
 import pl.smyk.gympassbackend.training.model.ScheduledTraining;
@@ -45,13 +46,13 @@ public class TrainingService {
     }
 
     //send training request
-    public ScheduledTrainingDto sendTrainingRequest(String trainerEmail, String userEmail) {
-        Optional<Trainer> trainerByEmail = trainerRepository.findByEmail(trainerEmail);
+    public ScheduledTrainingDto sendTrainingRequest(NewTrainingRequest request, String userEmail) {
+        Optional<Trainer> trainerByEmail = trainerRepository.findByEmail(request.getTrainerEmail());
 
         Trainer trainer = trainerByEmail.orElse(null);
         User user = authService.findByEmail(userEmail).orElse(null);
 
-        ScheduledTraining newTraining = ScheduledTraining.builder().trainingDateTime(LocalDateTime.now()).trainer(trainer).user(user).trainingStatus(TrainingStatus.WAITING).build();
+        ScheduledTraining newTraining = ScheduledTraining.builder().trainingDateTime(LocalDateTime.now()).trainer(trainer).user(user).trainingType(request.getTrainingType()).trainingStatus(TrainingStatus.WAITING).build();
         ScheduledTraining saved = scheduledTrainingRepository.save(newTraining);
         return ScheduledTrainingMapper.INSTANCE.toDto(saved);
     }
