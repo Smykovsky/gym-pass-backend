@@ -58,6 +58,21 @@ public class TrainingService {
     }
 
     //cancel training by user
+    public void cancelTraining(String userEmail, String id) {
+        Optional<User> byEmail = authService.findByEmail(userEmail);
+        if (byEmail.isEmpty()) {
+            return;
+        }
+
+        User user = byEmail.get();
+        List<ScheduledTraining> allByUser = scheduledTrainingRepository.findAllByUser(user);
+        Optional<ScheduledTraining> first = allByUser.stream().filter(scheduledTraining -> scheduledTraining.getId().equals(id)).findFirst();
+        if (first.isEmpty()) {
+            return;
+        }
+
+        scheduledTrainingRepository.delete(first.get());
+    }
 
 
 }
