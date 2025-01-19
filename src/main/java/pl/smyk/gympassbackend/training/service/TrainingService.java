@@ -45,6 +45,29 @@ public class TrainingService {
                 .collect(Collectors.toList());
     }
 
+
+    //get user training by id
+    public ScheduledTrainingDto getUserTrainingById(String userEmail, String trainingId) {
+      if (userEmail.isEmpty()) {
+        return null;
+      }
+
+      Optional<User> byEmail = authService.findByEmail(userEmail);
+      if (byEmail.isEmpty()) {
+        return null;
+      }
+
+      User user = byEmail.get();
+      List<ScheduledTraining> allByUser = scheduledTrainingRepository.findAllByUser(user);
+      Optional<ScheduledTraining> first = allByUser.stream().filter(scheduledTraining -> scheduledTraining.getId().equals(trainingId)).findFirst();
+
+      if (first.isEmpty()) {
+        return null;
+      }
+      ScheduledTraining scheduledTraining = first.get();
+      return ScheduledTrainingMapper.INSTANCE.toDto(scheduledTraining);
+    }
+
     //send training request
     public ScheduledTrainingDto sendTrainingRequest(NewTrainingRequest request, String userEmail) {
         Optional<Trainer> trainerByEmail = trainerRepository.findByEmail(request.getTrainerEmail());
