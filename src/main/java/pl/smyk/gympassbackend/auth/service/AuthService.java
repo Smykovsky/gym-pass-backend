@@ -36,6 +36,10 @@ public class AuthService {
         return userRepository.findByEmail(email);
     }
 
+    public Optional<User> findById(String id) {
+        return userRepository.findById(id);
+    }
+
     public void save(User user) {
         userRepository.save(user);
     }

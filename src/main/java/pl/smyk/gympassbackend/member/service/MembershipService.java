@@ -6,6 +6,7 @@ import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.service.AuthService;
 import pl.smyk.gympassbackend.member.model.Membership;
 import pl.smyk.gympassbackend.member.repository.MembershipRepository;
+import pl.smyk.gympassbackend.member.util.AESUtils;
 import pl.smyk.gympassbackend.member.util.CodeGenerator;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ public class MembershipService {
     private final MembershipRepository membershipRepository;
     private final AuthService userService;
     private final CodeGenerator codeGenerator;
+    private final AuthService authService;
 
 
     public Membership getMembershipByEmail(String email) {
@@ -57,5 +59,18 @@ public class MembershipService {
         membershipRepository.save(user.getMembership());
 
         userService.save(user);
+    }
+
+    //refactor
+    public User isMembershipValid(String qrCodeData) throws Exception {
+        if (qrCodeData.isEmpty()) {
+            return null;
+        }
+
+        String decryptedData = AESUtils.decrypt(qrCodeData);
+
+        Optional<User> byId = authService.findById(decryptedData);
+        return byId.orElse(null);
+
     }
 }
