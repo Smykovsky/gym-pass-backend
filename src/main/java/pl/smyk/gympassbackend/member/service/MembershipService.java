@@ -61,8 +61,7 @@ public class MembershipService {
         userService.save(user);
     }
 
-    //refactor
-    public User isMembershipValid(String qrCodeData) throws Exception {
+    public User scanUserMembershipPass(String qrCodeData) throws Exception {
         if (qrCodeData.isEmpty()) {
             return null;
         }
@@ -70,7 +69,20 @@ public class MembershipService {
         String decryptedData = AESUtils.decrypt(qrCodeData);
 
         Optional<User> byId = authService.findById(decryptedData);
-        return byId.orElse(null);
 
+
+        return byId.orElse(null);
+    }
+
+    //refactor
+    public boolean isMembershipValid(Membership membership) {
+        if (membership == null ) {
+            return false;
+        }
+
+        LocalDate today = LocalDate.now();
+
+
+        return !today.isBefore(membership.getStartDate()) && !today.isAfter(membership.getEndDate());
     }
 }

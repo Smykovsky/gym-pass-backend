@@ -21,7 +21,6 @@ public class Membership {
     private LocalDate startDate;
     private LocalDate endDate;
     private String qrCode;
-    private String barCode;
     private MembershipType membershipType;
 
 
