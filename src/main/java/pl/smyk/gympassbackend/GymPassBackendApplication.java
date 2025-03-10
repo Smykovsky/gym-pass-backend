@@ -65,12 +65,12 @@ public class GymPassBackendApplication implements CommandLineRunner {
 //        saved.setMembership(membership);
 //
 //        userRepository.save(saved);
-
+//
 //        Optional<Trainer> byEmail = trainerRepository.findByEmail("t@example.com");
-//        Trainer trainer = byEmail.get();
-//        trainer.getMembership().setStartDate(LocalDate.now());
-//        trainer.getMembership().setEndDate(LocalDate.now().plusMonths(2));
-//        trainer.getMembership().setActive(true);
+//        Trainer trainer1 = byEmail.get();
+//        trainer1.getMembership().setStartDate(LocalDate.now());
+//        trainer1.getMembership().setEndDate(LocalDate.now().plusMonths(2));
+//        trainer1.getMembership().setActive(true);
 //
 //        membershipRepository.save(trainer.getMembership());
 //

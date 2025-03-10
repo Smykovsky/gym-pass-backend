@@ -35,10 +35,6 @@ public class MembershipService {
         return user.getMembership();
     }
 
-    public void addMembership() {
-
-    }
-
     public void renewMembership(String userEmail, int months) {
         Optional<User> byEmail = userService.findByEmail(userEmail);
         if (byEmail.isEmpty()) {
@@ -61,17 +57,17 @@ public class MembershipService {
         userService.save(user);
     }
 
-    public User scanUserMembershipPass(String qrCodeData) throws Exception {
+    public boolean scanUserMembershipPass(String qrCodeData) throws Exception {
         if (qrCodeData.isEmpty()) {
-            return null;
+            return false;
         }
 
         String decryptedData = AESUtils.decrypt(qrCodeData);
 
         Optional<User> byId = authService.findById(decryptedData);
 
-
-        return byId.orElse(null);
+        User user = byId.get();
+        return isMembershipValid(user.getMembership());
     }
 
     //refactor

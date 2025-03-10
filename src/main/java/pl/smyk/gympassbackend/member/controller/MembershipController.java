@@ -36,8 +36,11 @@ public class MembershipController {
             return ResponseEntity.status(401).body("Unauthorized");
         }
 
-        User membershipValid = membershipService.scanUserMembershipPass(qrCodeData);
+        boolean isMembershipValid = membershipService.scanUserMembershipPass(qrCodeData);
+        if (!isMembershipValid) {
+            return ResponseEntity.ok("Membership is not active!");
+        }
+        return ResponseEntity.ok("Membership is active!");
 
-        return ResponseEntity.ok("Membership valid for QR code: " + membershipValid.getEmail());
     }
 }

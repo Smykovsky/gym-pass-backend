@@ -21,12 +21,14 @@ public class Membership {
     private LocalDate startDate;
     private LocalDate endDate;
     private String qrCode;
+    private String userId;
     private MembershipType membershipType;
 
 
     public void generateCodes(CodeGenerator codeGenerator, String userId) {
         try {
             this.qrCode = codeGenerator.generateQRCode(userId);
+            this.userId = userId;
         } catch (WriterException | IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
