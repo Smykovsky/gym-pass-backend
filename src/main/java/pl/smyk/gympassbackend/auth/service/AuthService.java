@@ -50,6 +50,7 @@ public class AuthService {
                 .email(registerRequest.getEmail())
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
+                .gender(registerRequest.getGender())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .roles(List.of(Role.USER))
                 .build();
@@ -103,6 +104,7 @@ public class AuthService {
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .gender(user.getGender())
                 .membershipData(
                         UserDataResponse.MembershipData.builder()
                                 .active(user.getMembership().isActive())

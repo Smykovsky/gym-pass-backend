@@ -31,6 +31,7 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private String password;
+    private Gender gender;
     private List<Role> roles;
     @DBRef
     @Nullable

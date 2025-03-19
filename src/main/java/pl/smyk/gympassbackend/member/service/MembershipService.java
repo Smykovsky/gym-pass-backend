@@ -57,9 +57,9 @@ public class MembershipService {
         userService.save(user);
     }
 
-    public boolean scanUserMembershipPass(String qrCodeData) throws Exception {
+    public Membership scanUserMembershipPass(String qrCodeData) throws Exception {
         if (qrCodeData.isEmpty()) {
-            return false;
+            return null;
         }
 
         String decryptedData = AESUtils.decrypt(qrCodeData);
@@ -67,7 +67,7 @@ public class MembershipService {
         Optional<User> byId = authService.findById(decryptedData);
 
         User user = byId.get();
-        return isMembershipValid(user.getMembership());
+        return user.getMembership();
     }
 
     //refactor

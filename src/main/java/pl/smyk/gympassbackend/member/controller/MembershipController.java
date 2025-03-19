@@ -31,16 +31,17 @@ public class MembershipController {
 
     // refactor
     @PostMapping("/validate/{qrCodeData}")
-    public ResponseEntity<String> validateMembership(Authentication authentication, @PathVariable String qrCodeData) throws Exception {
+    public ResponseEntity<?> validateMembership(Authentication authentication, @PathVariable String qrCodeData) throws Exception {
         if (!authentication.isAuthenticated()) {
             return ResponseEntity.status(401).body("Unauthorized");
         }
 
-        boolean isMembershipValid = membershipService.scanUserMembershipPass(qrCodeData);
-        if (!isMembershipValid) {
+        Membership membership = membershipService.scanUserMembershipPass(qrCodeData);
+        if (membership == null) {
             return ResponseEntity.ok("Membership is not active!");
         }
-        return ResponseEntity.ok("Membership is active!");
+
+        return ResponseEntity.ok(membership);
 
     }
 }

@@ -3,6 +3,7 @@ package pl.smyk.gympassbackend.auth.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import pl.smyk.gympassbackend.auth.model.Gender;
 import pl.smyk.gympassbackend.member.model.MembershipType;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ public class UserDataResponse {
     private String email;
     private String firstName;
     private String lastName;
+    private Gender gender;
     private MembershipData membershipData;
 
     @Builder
