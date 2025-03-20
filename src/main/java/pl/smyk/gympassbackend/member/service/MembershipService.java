@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.service.AuthService;
+import pl.smyk.gympassbackend.member.dto.ValidateMemberResponse;
 import pl.smyk.gympassbackend.member.model.Membership;
 import pl.smyk.gympassbackend.member.repository.MembershipRepository;
 import pl.smyk.gympassbackend.member.util.AESUtils;
@@ -57,7 +58,7 @@ public class MembershipService {
         userService.save(user);
     }
 
-    public Membership scanUserMembershipPass(String qrCodeData) throws Exception {
+    public ValidateMemberResponse scanUserMembershipPass(String qrCodeData) throws Exception {
         if (qrCodeData.isEmpty()) {
             return null;
         }
@@ -67,16 +68,26 @@ public class MembershipService {
         Optional<User> byId = authService.findById(decryptedData);
 
         User user = byId.get();
-        return user.getMembership();
+        boolean membershipValid = isMembershipValid(user.getMembership());
+
+        ValidateMemberResponse response = new ValidateMemberResponse();
+        response.setUserEmail(user.getEmail());
+        response.setValid(membershipValid);
+
+        return response;
+
     }
 
-    //refactor
     public boolean isMembershipValid(Membership membership) {
         if (membership == null ) {
             return false;
         }
 
         LocalDate today = LocalDate.now();
+
+        if (membership.getStartDate() == null || membership.getEndDate() == null) {
+            return false;
+        }
 
 
         return !today.isBefore(membership.getStartDate()) && !today.isAfter(membership.getEndDate());

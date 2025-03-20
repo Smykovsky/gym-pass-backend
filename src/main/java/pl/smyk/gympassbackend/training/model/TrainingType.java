@@ -6,16 +6,20 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum TrainingType {
-    CARDIO,
-    STRENGTH,
-    CALISTHENICS,
-    CROSSFIT,
-    YOGA,
-    PILATES,
-    HIIT,
-    FUNCTIONAL,
-    MARTIAL_ARTS,
-    SPINNING;
+    CARDIO("Kardio"),
+    STRENGTH("Siłowy"),
+    CALISTHENICS("Kalistenika"),
+    CROSSFIT("Crossfit"),
+    YOGA("Joga"),
+    PILATES("Pilates"),
+    HIIT("HIIT"),
+    FUNCTIONAL("Funkcjonalny"),
+    MARTIAL_ARTS("Sztuki walki"),
+    SPINNING("Spinning");
 
-    private TrainingType trainingType;
+    private final String name;
+
+    public String getName() {
+        return name;
+    }
 }

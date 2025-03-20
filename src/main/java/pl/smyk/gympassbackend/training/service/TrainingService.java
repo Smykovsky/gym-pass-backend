@@ -2,6 +2,7 @@ package pl.smyk.gympassbackend.training.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.smyk.gympassbackend.auth.exception.UserNotFoundException;
 import pl.smyk.gympassbackend.auth.model.Trainer;
 import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.repository.TrainerRepository;
@@ -13,7 +14,6 @@ import pl.smyk.gympassbackend.training.model.ScheduledTraining;
 import pl.smyk.gympassbackend.training.model.TrainingStatus;
 import pl.smyk.gympassbackend.training.repository.ScheduledTrainingRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -28,16 +28,9 @@ public class TrainingService {
 
     //get user training list
     public List<ScheduledTrainingDto> getUserTrainings(String userEmail) {
-        if (userEmail.isEmpty()) {
-            return null;
-        }
+        User user = authService.findByEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        Optional<User> byEmail = authService.findByEmail(userEmail);
-        if (!byEmail.isPresent()) {
-            return null;
-        }
-
-        User user = byEmail.get();
         List<ScheduledTraining> allUserTrainings = scheduledTrainingRepository.findAllByUser(user);
 
         return allUserTrainings.stream()
@@ -48,16 +41,9 @@ public class TrainingService {
 
     //get user training by id
     public ScheduledTrainingDto getUserTrainingById(String userEmail, String trainingId) {
-      if (userEmail.isEmpty()) {
-        return null;
-      }
+        User user = authService.findByEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-      Optional<User> byEmail = authService.findByEmail(userEmail);
-      if (byEmail.isEmpty()) {
-        return null;
-      }
-
-      User user = byEmail.get();
       List<ScheduledTraining> allByUser = scheduledTrainingRepository.findAllByUser(user);
       Optional<ScheduledTraining> first = allByUser.stream().filter(scheduledTraining -> scheduledTraining.getId().equals(trainingId)).findFirst();
 
@@ -82,12 +68,9 @@ public class TrainingService {
 
     //cancel training by user
     public void cancelTraining(String userEmail, String id) {
-        Optional<User> byEmail = authService.findByEmail(userEmail);
-        if (byEmail.isEmpty()) {
-            return;
-        }
+        User user = authService.findByEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        User user = byEmail.get();
         List<ScheduledTraining> allByUser = scheduledTrainingRepository.findAllByUser(user);
         Optional<ScheduledTraining> first = allByUser.stream().filter(scheduledTraining -> scheduledTraining.getId().equals(id)).findFirst();
         if (first.isEmpty()) {
@@ -96,6 +79,4 @@ public class TrainingService {
 
         scheduledTrainingRepository.delete(first.get());
     }
-
-
 }

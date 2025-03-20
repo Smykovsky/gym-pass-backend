@@ -30,4 +30,6 @@ public class ScheduledTraining {
     private User user;
     private TrainingType trainingType;
     private TrainingStatus trainingStatus;
+    @Nullable
+    private String rejectionReason;
 }

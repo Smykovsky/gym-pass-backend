@@ -14,4 +14,5 @@ public class ScheduledTrainingDto {
     private String userEmail;
     private TrainingType trainingType;
     private TrainingStatus trainingStatus;
+    private String rejectionReason;
 }

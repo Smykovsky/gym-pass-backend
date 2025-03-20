@@ -105,6 +105,5 @@ public class GymPassBackendApplication implements CommandLineRunner {
 //
 //        ScheduledTraining newTraining = ScheduledTraining.builder().trainingDateTime(LocalDateTime.now()).trainer(trainer).user(user).trainingStatus(TrainingStatus.WAITING).build();
 //        scheduledTrainingRepository.save(newTraining);
-
     }
 }

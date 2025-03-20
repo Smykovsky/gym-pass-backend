@@ -12,6 +12,4 @@ import java.util.List;
 public interface ScheduledTrainingRepository extends MongoRepository<ScheduledTraining, String> {
     List<ScheduledTraining> findAllByUser(User user);
     List<ScheduledTraining> findAllByTrainer(Trainer trainer);
-
-
 }
