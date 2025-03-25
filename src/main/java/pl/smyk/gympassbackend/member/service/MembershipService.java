@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.service.AuthService;
+import pl.smyk.gympassbackend.member.dto.MembershipDto;
 import pl.smyk.gympassbackend.member.dto.ValidateMemberResponse;
+import pl.smyk.gympassbackend.member.mapper.MembershipMapper;
 import pl.smyk.gympassbackend.member.model.Membership;
 import pl.smyk.gympassbackend.member.repository.MembershipRepository;
 import pl.smyk.gympassbackend.member.util.AESUtils;
@@ -22,7 +24,7 @@ public class MembershipService {
     private final AuthService authService;
 
 
-    public Membership getMembershipByEmail(String email) {
+    public MembershipDto getMembershipByEmail(String email) {
         if (email.isEmpty()) {
             return null;
         }
@@ -33,7 +35,7 @@ public class MembershipService {
         }
 
         User user = byEmail.get();
-        return user.getMembership();
+        return MembershipMapper.INSTANCE.toDto(user.getMembership());
     }
 
     public void renewMembership(String userEmail, int months) {

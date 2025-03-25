@@ -6,7 +6,13 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum TrainingStatus {
-    WAITING, CONFIRMED, DECLINED;
+    WAITING("Oczekujący"),
+    CONFIRMED("Potwierdzony"),
+    DECLINED("Odrzucony");
 
-    private TrainingStatus trainingStatus;
+    private final String value;
+
+    public String getValue() {
+        return value;
+    }
 }

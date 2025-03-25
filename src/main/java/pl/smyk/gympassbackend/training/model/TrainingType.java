@@ -12,14 +12,14 @@ public enum TrainingType {
     CROSSFIT("Crossfit"),
     YOGA("Joga"),
     PILATES("Pilates"),
-    HIIT("HIIT"),
+    HIIT("Trening interwałowy"),
     FUNCTIONAL("Funkcjonalny"),
     MARTIAL_ARTS("Sztuki walki"),
     SPINNING("Spinning");
 
-    private final String name;
+    private final String value;
 
-    public String getName() {
-        return name;
+    public String getValue() {
+        return value;
     }
 }

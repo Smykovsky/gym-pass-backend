@@ -40,6 +40,7 @@ public class SecurityConfig{
                 .permitAll()
                 .requestMatchers("/api/membership/**").authenticated()
                 .requestMatchers("/api/training").authenticated()
+                .requestMatchers("/api/review/**").authenticated()
                 .requestMatchers("/api/receptionist/**").hasAnyRole(RECEPTIONIST.name())
                 .requestMatchers("/api/trainer/**").hasAnyRole(TRAINER.name())
                 .requestMatchers("/api/admin/**").hasAnyRole(ADMIN.name())

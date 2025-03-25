@@ -1,22 +1,27 @@
 package pl.smyk.gympassbackend.member.model;
 
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
 public enum MembershipType {
-    MONTHLY(1, 0),
-    QUARTERLY(3, 10),
-    SEMI_ANNUAL(6, 20),
-    ANNUAL(12, 35);
+    MONTHLY("Miesięczny", 1, 0),
+    QUARTERLY("Kwartalny", 3, 10),
+    SEMI_ANNUAL("Pół roczny", 6, 20),
+    ANNUAL("Roczny",12, 35);
 
     private static final double PRICE_PER_MONTH = 80.00;
+    private final String value;
     private final int months;
     private final int discountPercent ;
 
-    MembershipType(int months, int discountPercent) {
+    MembershipType(String value, int months, int discountPercent) {
+        this.value = value;
         this.months = months;
         this.discountPercent = discountPercent;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     public double getDiscountedPrice() {

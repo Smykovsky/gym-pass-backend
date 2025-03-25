@@ -12,7 +12,7 @@ public class ScheduledTrainingDto {
     private LocalDateTime trainingDateTime;
     private String trainerEmail;
     private String userEmail;
-    private TrainingType trainingType;
-    private TrainingStatus trainingStatus;
+    private String trainingType;
+    private String trainingStatus;
     private String rejectionReason;
 }

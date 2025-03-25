@@ -61,7 +61,7 @@ public class TrainingService {
         Trainer trainer = trainerByEmail.orElse(null);
         User user = authService.findByEmail(userEmail).orElse(null);
 
-        ScheduledTraining newTraining = ScheduledTraining.builder().trainingDateTime(LocalDateTime.now()).trainer(trainer).user(user).trainingType(request.getTrainingType()).trainingStatus(TrainingStatus.WAITING).build();
+        ScheduledTraining newTraining = ScheduledTraining.builder().trainingDateTime(request.getTrainingTime()).trainer(trainer).user(user).trainingType(request.getTrainingType()).trainingStatus(TrainingStatus.WAITING).build();
         ScheduledTraining saved = scheduledTrainingRepository.save(newTraining);
         return ScheduledTrainingMapper.INSTANCE.toDto(saved);
     }

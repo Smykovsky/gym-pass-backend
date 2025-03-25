@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.smyk.gympassbackend.training.model.TrainingType;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Data
 public class NewTrainingRequest {
     private String trainerEmail;
     private TrainingType trainingType;
+    private LocalDateTime trainingTime;
 }

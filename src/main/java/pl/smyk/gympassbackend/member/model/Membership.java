@@ -24,7 +24,6 @@ public class Membership {
     private String userId;
     private MembershipType membershipType;
 
-
     public void generateCodes(CodeGenerator codeGenerator, String userId) {
         try {
             this.qrCode = codeGenerator.generateQRCode(userId);

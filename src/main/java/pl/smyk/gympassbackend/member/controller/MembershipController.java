@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.smyk.gympassbackend.auth.model.User;
+import pl.smyk.gympassbackend.member.dto.MembershipDto;
 import pl.smyk.gympassbackend.member.dto.ValidateMemberResponse;
 import pl.smyk.gympassbackend.member.model.Membership;
 import pl.smyk.gympassbackend.member.service.MembershipService;
@@ -26,7 +27,7 @@ public class MembershipController {
             return ResponseEntity.notFound().build();
         }
 
-        Membership membershipByEmail = membershipService.getMembershipByEmail(email);
+        MembershipDto membershipByEmail = membershipService.getMembershipByEmail(email);
         return ResponseEntity.ok(membershipByEmail);
     }
 
