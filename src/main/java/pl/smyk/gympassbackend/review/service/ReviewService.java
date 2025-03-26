@@ -44,18 +44,29 @@ public class ReviewService {
             throw new BadRatingException();
         }
 
-        boolean isUserRatingExists = ratingRepository.findAll().stream()
-                .map(rating -> rating.getUser().getEmail())
-                .anyMatch(email -> email.equals(user.getEmail()));
+        Rating existingRating = ratingRepository.findByUser(user);
 
-        if (isUserRatingExists) {
-            throw new RatingAlreadyExistsException();
+        if (existingRating != null) {
+            existingRating.setRating(ratingRequest.getRating());
+            Rating updatedRating = ratingRepository.save(existingRating);
+            return RatingMapper.INSTANCE.ratingToRatingDto(updatedRating);
         }
 
         Rating newRating = Rating.builder().rating(ratingRequest.getRating()).user(user).build();
-        Rating saved = ratingRepository.save(newRating);
+        Rating savedRating = ratingRepository.save(newRating);
 
-        return RatingMapper.INSTANCE.ratingToRatingDto(saved);
+        return RatingMapper.INSTANCE.ratingToRatingDto(savedRating);
+    }
+
+    public boolean isUserRating(String userEmail) {
+        User user = authService.findByEmail(userEmail).orElse(null);
+        if (user == null) {
+            throw new UserNotFoundException("User not found");
+        }
+
+        return ratingRepository.findAll().stream()
+                .map(rating -> rating.getUser().getEmail())
+                .anyMatch(email -> email.equals(user.getEmail()));
     }
 
     public Map<String, Double> getRatingSummary() {
@@ -75,11 +86,17 @@ public class ReviewService {
         return result;
     }
 
-    public boolean isUserRating(String userEmail) {
+    public RatingDto getUserRating(String userEmail) {
         User user = authService.findByEmail(userEmail)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        return ratingRepository.findByUser(user) != null;
+        Rating byUser = ratingRepository.findByUser(user);
+
+        if (byUser == null) {
+            throw new RatingNotFoundException();
+        }
+
+        return RatingMapper.INSTANCE.ratingToRatingDto(byUser);
     }
 
     //delete rating
@@ -99,13 +116,13 @@ public class ReviewService {
 
 
     //add comment
-    public CommentDto addComment(CommentDto commentRequest) {
-        User user = authService.findByEmail(commentRequest.getUserEmail()).orElse(null);
+    public CommentDto addComment(String userEmail, String commentText) {
+        User user = authService.findByEmail(userEmail).orElse(null);
         if (user == null) {
             throw new UserNotFoundException("User not found");
         }
 
-        Comment build = Comment.builder().commentText(commentRequest.getCommentText()).user(user).subComments(new ArrayList<>()).build();
+        Comment build = Comment.builder().commentText(commentText).user(user).subComments(new ArrayList<>()).build();
         Comment saved = commentRepository.save(build);
 
         return CommentMapper.INSTANCE.commentToCommentDto(saved);
@@ -169,7 +186,7 @@ public class ReviewService {
         commentRepository.delete(comment);
     }
 
-    public CommentDto addSubComment(SubCommentDto subCommentDto) {
+    public void addSubComment(SubCommentDto subCommentDto) {
         User user = authService.findByEmail(subCommentDto.getUserEmail()).orElse(null);
         if (user == null) {
             throw new UserNotFoundException("User not found");
@@ -191,8 +208,6 @@ public class ReviewService {
 
         comment.addSubComment(saved);
         commentRepository.save(comment);
-
-        return CommentMapper.INSTANCE.commentToCommentDto(comment);
     }
 
     public void removeSubComment(SubCommentDto subCommentDto) {

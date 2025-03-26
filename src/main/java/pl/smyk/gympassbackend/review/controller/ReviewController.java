@@ -40,12 +40,21 @@ public class ReviewController {
     }
 
     @GetMapping("/rating/user")
+    public ResponseEntity<?> getUserRating(Authentication authentication) {
+        if (!authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+        RatingDto userRating = reviewService.getUserRating(authentication.getName());
+        return ResponseEntity.ok(userRating);
+    }
+
+    @GetMapping("/rating/user/isRating")
     public ResponseEntity<?> isUserRating(Authentication authentication) {
         if (!authentication.isAuthenticated()) {
             return ResponseEntity.status(401).build();
         }
-        boolean userRating = reviewService.isUserRating(authentication.getName());
-        return ResponseEntity.ok(userRating);
+        boolean isRating = reviewService.isUserRating(authentication.getName());
+        return ResponseEntity.ok(isRating);
     }
 
     @DeleteMapping("/rating")
@@ -59,35 +68,41 @@ public class ReviewController {
     }
 
     @PostMapping("/comment")
-    public ResponseEntity<?> addComment(Authentication authentication, @RequestBody CommentDto commentDto) {
+    public ResponseEntity<?> addComment(Authentication authentication, @RequestBody String commentText) {
         if (!authentication.isAuthenticated()) {
             return ResponseEntity.status(401).build();
         }
 
-        commentDto.setUserEmail(authentication.getName());
-
-        CommentDto response = reviewService.addComment(commentDto);
+        CommentDto response = reviewService.addComment(authentication.getName(), commentText);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/comment/sub")
-    public ResponseEntity<?> addSubComment(Authentication authentication, @RequestBody SubCommentDto commentDto) {
+    public ResponseEntity<?> addSubComment(Authentication authentication, @RequestBody SubCommentDto subCommentDto) {
         if (!authentication.isAuthenticated()) {
             return ResponseEntity.status(401).build();
         }
 
-        commentDto.setUserEmail(authentication.getName());
+        subCommentDto.setUserEmail(authentication.getName());
 
-        reviewService.addSubComment(commentDto);
-        return ResponseEntity.ok("Dodano sub komentarz");
+        System.out.println(subCommentDto);
+        reviewService.addSubComment(subCommentDto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/comment/sub")
-    public ResponseEntity<?> deleteSubComment(Authentication authentication, @RequestBody SubCommentDto commentDto) {
+    public ResponseEntity<?> deleteSubComment(
+            Authentication authentication,
+            @RequestParam String id,
+            @RequestParam String parentId) {
+
         if (!authentication.isAuthenticated()) {
             return ResponseEntity.status(401).build();
         }
 
+        SubCommentDto commentDto = new SubCommentDto();
+        commentDto.setId(id);
+        commentDto.setParentCommentId(parentId);
         commentDto.setUserEmail(authentication.getName());
 
         reviewService.removeSubComment(commentDto);
@@ -116,12 +131,11 @@ public class ReviewController {
         return ResponseEntity.ok(updatedComment);
     }
 
-    @DeleteMapping("/comment/{commentId}")
-    public ResponseEntity<?> deleteComment(Authentication authentication, @PathVariable String commentId) {
+    @DeleteMapping("/comment")
+    public ResponseEntity<?> deleteComment(Authentication authentication, @RequestParam String commentId) {
         if (!authentication.isAuthenticated()) {
             return ResponseEntity.status(401).build();
         }
-
 
         reviewService.deleteComment(commentId, authentication.getName());
         return ResponseEntity.ok("Komentarz został pomyślnie usunięty");
