@@ -39,6 +39,7 @@ public class SecurityConfig{
                 .requestMatchers("/api/auth/**")
                 .permitAll()
                 .requestMatchers("/api/membership/**").authenticated()
+                .requestMatchers("/api/trainer/**").authenticated()
                 .requestMatchers("/api/training").authenticated()
                 .requestMatchers("/api/review/**").authenticated()
                 .requestMatchers("/api/receptionist/**").hasAnyRole(RECEPTIONIST.name())

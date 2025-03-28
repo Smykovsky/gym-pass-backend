@@ -3,14 +3,18 @@ package pl.smyk.gympassbackend.auth.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.smyk.gympassbackend.auth.dto.UserDto;
 import pl.smyk.gympassbackend.auth.dto.request.LoginRequest;
 import pl.smyk.gympassbackend.auth.dto.request.RegisterRequest;
 import pl.smyk.gympassbackend.auth.dto.response.AuthResponse;
 import pl.smyk.gympassbackend.auth.dto.response.UserDataResponse;
 import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.service.AuthService;
+import pl.smyk.gympassbackend.auth.service.TrainerService;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -18,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService userService;
+    private final TrainerService trainerService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {

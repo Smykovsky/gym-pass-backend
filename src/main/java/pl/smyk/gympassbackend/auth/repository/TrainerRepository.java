@@ -1,6 +1,7 @@
 package pl.smyk.gympassbackend.auth.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.smyk.gympassbackend.auth.model.Trainer;
 import pl.smyk.gympassbackend.training.model.ScheduledTraining;
@@ -12,4 +13,6 @@ import java.util.Optional;
 public interface TrainerRepository extends MongoRepository<Trainer, String> {
     Optional<Trainer> findById(String id);
     Optional<Trainer> findByEmail(String email);
+    @Query("{ '_class' : 'trainer' }")
+    List<Trainer> findAllTrainers();
 }

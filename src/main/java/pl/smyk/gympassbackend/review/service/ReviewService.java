@@ -65,6 +65,7 @@ public class ReviewService {
         }
 
         return ratingRepository.findAll().stream()
+                .filter(rating -> rating.getUser() != null)
                 .map(rating -> rating.getUser().getEmail())
                 .anyMatch(email -> email.equals(user.getEmail()));
     }

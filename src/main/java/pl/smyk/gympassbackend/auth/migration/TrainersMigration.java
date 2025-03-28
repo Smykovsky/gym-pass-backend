@@ -54,6 +54,7 @@ public class TrainersMigration {
               .password(passwordEncoder.encode("12345678"))
               .roles(List.of(Role.TRAINER, Role.USER))
               .certifications(List.of("Crossfit", "Dietitian"))
+              .scheduledTrainings(List.of())
               .build();
 
       Trainer savedTrainer = userRepository.save(trainer);
