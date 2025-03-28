@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.TypeAlias;
-import pl.smyk.gympassbackend.training.model.ScheduledTraining;
-import pl.smyk.gympassbackend.training.model.TrainingStatus;
 import pl.smyk.gympassbackend.training.model.TrainingType;
 
 import java.util.List;
@@ -24,6 +22,4 @@ public class Trainer extends User {
     private List<String> certifications;
     @Nullable
     private List<TrainingType> trainingTypes;
-    @Nullable
-    private List<ScheduledTraining> scheduledTrainings;
 }

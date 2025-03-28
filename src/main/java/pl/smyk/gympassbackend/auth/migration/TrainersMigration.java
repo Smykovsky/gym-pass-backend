@@ -4,11 +4,8 @@ import io.mongock.api.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.stereotype.Component;
-import pl.smyk.gympassbackend.auth.model.Receptionist;
 import pl.smyk.gympassbackend.auth.model.Role;
 import pl.smyk.gympassbackend.auth.model.Trainer;
-import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.auth.repository.ReceptionistRepository;
 import pl.smyk.gympassbackend.auth.repository.TrainerRepository;
 import pl.smyk.gympassbackend.auth.repository.UserRepository;
@@ -54,7 +51,6 @@ public class TrainersMigration {
               .password(passwordEncoder.encode("12345678"))
               .roles(List.of(Role.TRAINER, Role.USER))
               .certifications(List.of("Crossfit", "Dietitian"))
-              .scheduledTrainings(List.of())
               .build();
 
       Trainer savedTrainer = userRepository.save(trainer);
@@ -73,26 +69,11 @@ public class TrainersMigration {
       membershipRepository.save(trainerFromDb.getMembership());
       trainerRepository.save(trainerFromDb);
     }
-
-    Optional<User> existingReceptionist = userRepository.findByEmail("r@example.com");
-
-    if (existingReceptionist.isEmpty()) {
-      Receptionist receptionist = Receptionist.builder()
-              .email("r@example.com")
-              .firstName("Recepcjonistka")
-              .lastName("Recepcjonistka")
-              .password(passwordEncoder.encode("12345678"))
-              .roles(List.of(Role.RECEPTIONIST, Role.USER))
-              .build();
-
-      userRepository.save(receptionist);
-    }
   }
 
   @RollbackExecution
   public void rollbackSeedTrainersAndReceptionist() {
     System.out.println("Rollback trainers and receptionist...");
     trainerRepository.findByEmail("t@example.com").ifPresent(trainerRepository::delete);
-    receptionistRepository.findByEmail("r@example.com").ifPresent(receptionistRepository::delete);
   }
 }

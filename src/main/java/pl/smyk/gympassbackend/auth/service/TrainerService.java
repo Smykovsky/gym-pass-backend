@@ -9,7 +9,11 @@ import pl.smyk.gympassbackend.auth.mapper.TrainerMapper;
 import pl.smyk.gympassbackend.auth.mapper.UserMapper;
 import pl.smyk.gympassbackend.auth.model.Trainer;
 import pl.smyk.gympassbackend.auth.repository.TrainerRepository;
+import pl.smyk.gympassbackend.training.model.ScheduledTraining;
+import pl.smyk.gympassbackend.training.model.TrainingStatus;
+import pl.smyk.gympassbackend.training.repository.ScheduledTrainingRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +23,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class TrainerService {
     private final TrainerRepository trainerRepository;
+    private final ScheduledTrainingRepository scheduledTrainingRepository;
 
     //find trainer by email
     public Trainer findByEmail(String email) {
@@ -39,15 +44,25 @@ public class TrainerService {
         Trainer trainer = trainerRepository.findByEmail(trainerEmail)
                 .orElseThrow(() -> new UserNotFoundException("Trainer not found!"));
 
-        if (trainer.getScheduledTrainings().isEmpty()) {
+        List<ScheduledTraining> allByTrainer = scheduledTrainingRepository.findAllByTrainer(trainer);
+
+        if (allByTrainer.isEmpty()) {
             return true;
         }
 
-        return trainer.getScheduledTrainings().stream()
+        LocalDate today = LocalDate.now();
+        if (dateTime.toLocalDate().isBefore(today)) {
+            return false;
+        }
+
+        return allByTrainer.stream()
                 .noneMatch(training -> {
                     LocalDateTime trainingStart = training.getTrainingDateTime();
                     LocalDateTime trainingEnd = trainingStart.plusHours(1);
-                    return !dateTime.isBefore(trainingStart) && !dateTime.isAfter(trainingEnd.minusMinutes(1));
+
+                    LocalDateTime allowedPrevious = trainingStart.minusHours(1);
+
+                    return dateTime.isAfter(allowedPrevious) && dateTime.isBefore(trainingEnd);
                 });
     }
 }

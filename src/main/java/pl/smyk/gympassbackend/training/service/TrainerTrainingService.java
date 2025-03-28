@@ -47,6 +47,14 @@ public class TrainerTrainingService {
             throw new UnauthorizedActionException("Trainer: " + request.getTrainerEmail() + " is not authorized to accept this request!");
         }
 
+        Optional<Trainer> byEmail = trainerRepository.findByEmail(request.getTrainerEmail());
+        if (byEmail.isEmpty()) {
+            return null;
+        }
+
+        Trainer trainer = byEmail.get();
+
+        trainerRepository.save(trainer);
         scheduledTraining.setTrainingStatus(TrainingStatus.CONFIRMED);
         ScheduledTraining saved = scheduledTrainingRepository.save(scheduledTraining);
         return ScheduledTrainingMapper.INSTANCE.toDto(saved);

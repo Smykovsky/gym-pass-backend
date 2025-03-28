@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.smyk.gympassbackend.auth.dto.TrainerDto;
-import pl.smyk.gympassbackend.auth.dto.UserDto;
 import pl.smyk.gympassbackend.auth.service.TrainerService;
 
 import java.time.LocalDateTime;

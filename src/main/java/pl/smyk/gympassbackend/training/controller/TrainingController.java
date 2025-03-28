@@ -6,7 +6,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.smyk.gympassbackend.training.dto.NewTrainingRequest;
 import pl.smyk.gympassbackend.training.dto.ScheduledTrainingDto;
-import pl.smyk.gympassbackend.training.model.ScheduledTraining;
 import pl.smyk.gympassbackend.training.service.TrainingService;
 
 import java.util.List;

@@ -16,7 +16,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pl.smyk.gympassbackend.auth.config.jwt.JwtAuthFilter;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static pl.smyk.gympassbackend.auth.model.Role.*;
 

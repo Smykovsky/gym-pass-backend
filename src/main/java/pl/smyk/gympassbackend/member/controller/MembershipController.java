@@ -5,12 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import pl.smyk.gympassbackend.auth.model.User;
 import pl.smyk.gympassbackend.member.dto.MembershipDto;
 import pl.smyk.gympassbackend.member.dto.ValidateMemberResponse;
-import pl.smyk.gympassbackend.member.model.Membership;
 import pl.smyk.gympassbackend.member.service.MembershipService;
-import pl.smyk.gympassbackend.member.util.AESUtils;
 
 import java.util.HashMap;
 
