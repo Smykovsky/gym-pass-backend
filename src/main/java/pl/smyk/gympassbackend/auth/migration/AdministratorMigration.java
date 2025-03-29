@@ -39,6 +39,7 @@ public class AdministratorMigration {
                 .email("admin@example.com")
                 .firstName("Admin")
                 .lastName("Admin")
+                .password(passwordEncoder.encode("12345678"))
                 .roles(List.of(Role.ADMIN, Role.USER))
                 .build();
 

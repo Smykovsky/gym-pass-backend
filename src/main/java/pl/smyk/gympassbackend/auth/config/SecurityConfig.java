@@ -14,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pl.smyk.gympassbackend.auth.config.jwt.JwtAuthFilter;
+import pl.smyk.gympassbackend.auth.handler.AccessDeniedHandler;
 
 import java.util.Arrays;
 
@@ -26,34 +27,34 @@ import static pl.smyk.gympassbackend.auth.model.Role.*;
 public class SecurityConfig{
     private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final AccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf()
-                .disable()
-                .cors().configurationSource(corsConfigurationSource())
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**")
-                .permitAll()
-                .requestMatchers("/api/membership/**").authenticated()
-                .requestMatchers("/api/trainer/**").authenticated()
-                .requestMatchers("/api/training").authenticated()
-                .requestMatchers("/api/review/**").authenticated()
-                .requestMatchers("/api/receptionist/**").hasAnyRole(RECEPTIONIST.name())
-                .requestMatchers("/api/trainer/**").hasAnyRole(TRAINER.name())
-                .requestMatchers("/api/admin/**").hasAnyRole(ADMIN.name())
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+      http
+        .csrf().disable()
+        .cors().configurationSource(corsConfigurationSource())
+        .and()
+        .authorizeHttpRequests()
+        .requestMatchers("/api/auth/**")
+        .permitAll()
+        .requestMatchers("/api/membership/**").authenticated()
+        .requestMatchers("/api/trainer/**").authenticated()
+        .requestMatchers("/api/training").authenticated()
+        .requestMatchers("/api/review/**").authenticated()
+        .requestMatchers("/api/receptionist/**").hasAnyRole(RECEPTIONIST.name())
+        .requestMatchers("/api/trainer/**").hasAnyRole(TRAINER.name())
+        .requestMatchers("/api/admin/**").hasAnyRole(ADMIN.name())
+        .anyRequest().authenticated()
+        .and()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authenticationProvider(authenticationProvider)
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+        .exceptionHandling()
+        .accessDeniedHandler(accessDeniedHandler);
 
-        return http.build();
+      return http.build();
     }
 
     @Bean

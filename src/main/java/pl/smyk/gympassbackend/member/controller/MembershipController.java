@@ -27,19 +27,4 @@ public class MembershipController {
         MembershipDto membershipByEmail = membershipService.getMembershipByEmail(email);
         return ResponseEntity.ok(membershipByEmail);
     }
-
-
-    // refactor
-    @PostMapping("/validate/{qrCodeData}")
-    @PreAuthorize("hasAuthority('ROLE_RECEPTIONIST')")
-    public ResponseEntity<?> validateMembership(Authentication authentication, @PathVariable String qrCodeData) throws Exception {
-        if (!authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).body("Unauthorized");
-        }
-
-        ValidateMemberResponse validateMemberResponse = membershipService.scanUserMembershipPass(qrCodeData);
-
-        return ResponseEntity.ok(validateMemberResponse);
-
-    }
 }
