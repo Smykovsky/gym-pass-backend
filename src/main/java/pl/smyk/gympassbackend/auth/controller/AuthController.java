@@ -2,6 +2,7 @@ package pl.smyk.gympassbackend.auth.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.smyk.gympassbackend.auth.dto.request.LoginRequest;
 import pl.smyk.gympassbackend.auth.dto.request.RegisterRequest;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final AuthService userService;
+    private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
@@ -27,12 +28,12 @@ public class AuthController {
             return ResponseEntity.status(409).body(responseMap);
         }
 
-        if (userService.findByEmail(registerRequest.getEmail()).isPresent()) {
+        if (authService.findByEmail(registerRequest.getEmail()).isPresent()) {
             responseMap.put("message", "Użytkownik o takim adresie email już istnieje!");
             return ResponseEntity.status(409).body(responseMap);
         }
 
-        AuthResponse registerResponse = userService.register(registerRequest);
+        AuthResponse registerResponse = authService.register(registerRequest);
         responseMap.put("message", registerResponse.getMessage());
         responseMap.put("User", registerRequest.getEmail());
         return ResponseEntity.ok(responseMap);
@@ -41,7 +42,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest authRequest) {
         HashMap<String, Object> responseMap = new HashMap<>();
-        Optional<User> userByEmail = userService.findByEmail(authRequest.getEmail());
+        Optional<User> userByEmail = authService.findByEmail(authRequest.getEmail());
 
         if (userByEmail.isEmpty()) {
             responseMap.put("message", "Nie znaleziono użytkownika o takim adresie email!");
@@ -49,7 +50,7 @@ public class AuthController {
         }
 
         try {
-            AuthResponse tokens = userService.login(authRequest);
+            AuthResponse tokens = authService.login(authRequest);
             responseMap.put("zalogowano", authRequest.getEmail());
             responseMap.put("tokens", tokens);
             return ResponseEntity.ok(responseMap);
@@ -57,15 +58,5 @@ public class AuthController {
             responseMap.put("message", e.getMessage());
             return ResponseEntity.status(401).body(responseMap);
         }
-    }
-
-    @GetMapping("/user/{email}")
-    public ResponseEntity<?> getUserData(@PathVariable String email) {
-        if (email.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        UserDataResponse userData = userService.getUserData(email);
-        return ResponseEntity.ok(userData);
     }
 }

@@ -3,10 +3,12 @@ package pl.smyk.gympassbackend.auth.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import pl.smyk.gympassbackend.auth.model.Achievement;
 import pl.smyk.gympassbackend.auth.model.Gender;
 import pl.smyk.gympassbackend.member.model.MembershipType;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @Builder
 @Getter
@@ -17,6 +19,7 @@ public class UserDataResponse {
     private String lastName;
     private Gender gender;
     private MembershipData membershipData;
+    private Map<Achievement, Integer> progress;
 
     @Builder
     @Getter

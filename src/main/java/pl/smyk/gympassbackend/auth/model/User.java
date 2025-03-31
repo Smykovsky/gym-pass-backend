@@ -11,11 +11,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.smyk.gympassbackend.member.model.Membership;
-import pl.smyk.gympassbackend.training.model.ScheduledTraining;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Document(collection = "users")
 @TypeAlias("user")
@@ -36,7 +33,24 @@ public class User implements UserDetails {
     @DBRef
     @Nullable
     private Membership membership;
+    private Map<Achievement, Integer> progress = new HashMap<>();
 
+    public void incrementProgress(Achievement achievement, int value) {
+        int newProgress = progress.getOrDefault(achievement, 0) + value;
+        progress.put(achievement, newProgress);
+
+        if (newProgress >= achievement.getRequiredProgress() && !isCompleted(achievement)) {
+            progress.put(achievement, achievement.getRequiredProgress());
+        }
+    }
+
+    public int getProgress(Achievement achievement) {
+        return progress.getOrDefault(achievement, 0);
+    }
+
+    public boolean isCompleted(Achievement achievement) {
+        return progress.getOrDefault(achievement, 0) >= achievement.getRequiredProgress();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -7,6 +7,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.smyk.gympassbackend.auth.dto.request.UpdateUserDataRequest;
+import pl.smyk.gympassbackend.auth.exception.UserNotFoundException;
+import pl.smyk.gympassbackend.auth.model.Achievement;
 import pl.smyk.gympassbackend.auth.config.jwt.JwtUtil;
 import pl.smyk.gympassbackend.auth.dto.request.LoginRequest;
 import pl.smyk.gympassbackend.auth.dto.request.RegisterRequest;
@@ -19,8 +22,10 @@ import pl.smyk.gympassbackend.member.model.Membership;
 import pl.smyk.gympassbackend.member.repository.MembershipRepository;
 import pl.smyk.gympassbackend.member.util.CodeGenerator;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +58,8 @@ public class AuthService {
                 .gender(registerRequest.getGender())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .roles(List.of(Role.USER))
+                .progress(Arrays.stream(Achievement.values())
+                        .collect(Collectors.toMap(a -> a, a -> 0)))
                 .build();
 
         var savedUser = userRepository.save(user);
@@ -81,6 +88,8 @@ public class AuthService {
             var jwtToken = jwtUtil.generateToken(user);
             var refreshToken = jwtUtil.generateRefreshToken(user);
 
+            updateLoginAchievements(user);
+
             return AuthResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).message("Pomyślnie zalogowano!").build();
         } catch (BadCredentialsException e) {
             throw new RuntimeException("Podane poświadczenia są nie prawdiłowe!", e);
@@ -105,6 +114,7 @@ public class AuthService {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .gender(user.getGender())
+                .progress(user.getProgress())
                 .membershipData(
                         UserDataResponse.MembershipData.builder()
                                 .active(user.getMembership().isActive())
@@ -113,5 +123,32 @@ public class AuthService {
                                 .qrCode(user.getMembership().getQrCode())
                                 .membershipType(user.getMembership().getMembershipType())
                                 .build()).build();
+    }
+
+    public void updateUserData(UpdateUserDataRequest updateUserDataRequest) {
+        User user = findByEmail(updateUserDataRequest.getUserEmail()).orElseThrow(() -> new UserNotFoundException("User not found!"));
+        if (user == null) {
+            return;
+        }
+
+        user.setFirstName(updateUserDataRequest.getFirstName());
+        user.setLastName(updateUserDataRequest.getLastName());
+        user.setGender(updateUserDataRequest.getGender());
+        user.setEmail(updateUserDataRequest.getUserEmail());
+
+        userRepository.save(user);
+
+    }
+
+    private void updateLoginAchievements(User user) {
+        if (!user.isCompleted(Achievement.FIRST_LOGIN)) {
+            user.incrementProgress(Achievement.FIRST_LOGIN, 1);
+        }
+
+        if (!user.isCompleted(Achievement.HUNDRED_LOGINS)) {
+            user.incrementProgress(Achievement.HUNDRED_LOGINS, 1);
+        }
+
+        userRepository.save(user);
     }
 }

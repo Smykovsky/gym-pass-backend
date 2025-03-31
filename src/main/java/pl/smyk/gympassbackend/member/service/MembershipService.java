@@ -70,10 +70,12 @@ public class MembershipService {
         Optional<User> byId = authService.findById(decryptedData);
 
         User user = byId.get();
+
         boolean membershipValid = isMembershipValid(user.getMembership());
 
         ValidateMemberResponse response = new ValidateMemberResponse();
         response.setUserEmail(user.getEmail());
+        response.setMembershipCardId(user.getMembership().getId());
         response.setValid(membershipValid);
 
         return response;
