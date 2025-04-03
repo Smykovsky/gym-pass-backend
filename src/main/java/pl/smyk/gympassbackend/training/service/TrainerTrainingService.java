@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.smyk.gympassbackend.auth.model.Trainer;
 import pl.smyk.gympassbackend.auth.repository.TrainerRepository;
+import pl.smyk.gympassbackend.auth.service.AchievementService;
 import pl.smyk.gympassbackend.auth.service.TrainerService;
 import pl.smyk.gympassbackend.training.dto.ScheduledTrainingDto;
 import pl.smyk.gympassbackend.training.dto.TrainingActionRequest;
@@ -26,6 +27,7 @@ public class TrainerTrainingService {
     private final TrainerRepository trainerRepository;
     private final TrainerService trainerService;
     private final ScheduledTrainingRepository scheduledTrainingRepository;
+    private final AchievementService achievementService;
 
     public List<ScheduledTrainingDto> getTrainerTrainings(String trainerEmail) {
         Trainer trainer = trainerService.findByEmail(trainerEmail);
@@ -57,6 +59,9 @@ public class TrainerTrainingService {
         trainerRepository.save(trainer);
         scheduledTraining.setTrainingStatus(TrainingStatus.CONFIRMED);
         ScheduledTraining saved = scheduledTrainingRepository.save(scheduledTraining);
+
+        achievementService.updateTrainingsAchievement(saved.getUser());
+
         return ScheduledTrainingMapper.INSTANCE.toDto(saved);
     }
 
@@ -75,7 +80,6 @@ public class TrainerTrainingService {
 
         ScheduledTraining saved = scheduledTrainingRepository.save(scheduledTraining);
         return ScheduledTrainingMapper.INSTANCE.toDto(saved);
-
     }
 
     //get not available days/datetime

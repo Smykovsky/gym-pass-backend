@@ -48,6 +48,8 @@ public class TrainerTrainingController {
             return ResponseEntity.status(401).build();
         }
 
+        System.out.println(request);
+
         ScheduledTrainingDto scheduledTrainingDto = trainerTrainingService.declineTraining(request);
         return ResponseEntity.ok(scheduledTrainingDto);
     }

@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 public class AuthService {
     private final UserRepository userRepository;
     private final MembershipRepository membershipRepository;
+    private final AchievementService achievementService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -88,7 +89,7 @@ public class AuthService {
             var jwtToken = jwtUtil.generateToken(user);
             var refreshToken = jwtUtil.generateRefreshToken(user);
 
-            updateLoginAchievements(user);
+            achievementService.updateLoginAchievements(user);
 
             return AuthResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).message("Pomyślnie zalogowano!").build();
         } catch (BadCredentialsException e) {
@@ -138,17 +139,5 @@ public class AuthService {
 
         userRepository.save(user);
 
-    }
-
-    private void updateLoginAchievements(User user) {
-        if (!user.isCompleted(Achievement.FIRST_LOGIN)) {
-            user.incrementProgress(Achievement.FIRST_LOGIN, 1);
-        }
-
-        if (!user.isCompleted(Achievement.HUNDRED_LOGINS)) {
-            user.incrementProgress(Achievement.HUNDRED_LOGINS, 1);
-        }
-
-        userRepository.save(user);
     }
 }

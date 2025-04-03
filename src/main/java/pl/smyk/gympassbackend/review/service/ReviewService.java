@@ -1,6 +1,7 @@
 package pl.smyk.gympassbackend.review.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.smyk.gympassbackend.auth.exception.UserNotFoundException;
 import pl.smyk.gympassbackend.auth.model.User;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -94,7 +96,7 @@ public class ReviewService {
         Rating byUser = ratingRepository.findByUser(user);
 
         if (byUser == null) {
-            throw new RatingNotFoundException();
+            return null;
         }
 
         return RatingMapper.INSTANCE.ratingToRatingDto(byUser);
