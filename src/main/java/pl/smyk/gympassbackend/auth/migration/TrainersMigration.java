@@ -64,7 +64,7 @@ public class TrainersMigration {
       Trainer trainerFromDb = trainerRepository.findByEmail("t@example.com").orElseThrow();
       trainerFromDb.getMembership().setStartDate(LocalDate.now());
       trainerFromDb.getMembership().setEndDate(LocalDate.now().plusMonths(2));
-      trainerFromDb.getMembership().setActive(true);
+//      trainerFromDb.getMembership().setActive(true);
 
       membershipRepository.save(trainerFromDb.getMembership());
       trainerRepository.save(trainerFromDb);

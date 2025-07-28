@@ -17,7 +17,6 @@ import java.time.LocalDate;
 public class Membership {
     @MongoId
     private String id;
-    private boolean active;
     private LocalDate startDate;
     private LocalDate endDate;
     private String qrCode;
@@ -33,5 +32,10 @@ public class Membership {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean isActive() {
+        LocalDate today = LocalDate.now();
+        return (startDate != null && endDate != null && !today.isBefore(startDate) && !today.isAfter(endDate));
     }
 }

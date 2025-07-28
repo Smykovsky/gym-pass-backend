@@ -2,13 +2,17 @@ package pl.smyk.gympassbackend.member.service;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
+import com.stripe.model.PaymentIntentCollection;
 import com.stripe.param.PaymentIntentConfirmParams;
+import com.stripe.param.PaymentIntentListParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.smyk.gympassbackend.member.dto.PaymentConfirmRequest;
 import pl.smyk.gympassbackend.member.dto.PaymentCreateRequest;
+import pl.smyk.gympassbackend.member.dto.PaymentResponse;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.stripe.param.PaymentIntentConfirmParams.PaymentMethodData.Type.BLIK;
 
@@ -28,6 +32,26 @@ public class PaymentService {
         }
 
         return retrieve;
+    }
+
+    public List<PaymentResponse> getPaymentsByUserEmail(String email) throws StripeException {
+        PaymentIntentListParams params = PaymentIntentListParams.builder()
+                .setLimit(100L)
+                .build();
+
+        PaymentIntentCollection paymentIntents = PaymentIntent.list(params);
+
+        return paymentIntents.getData().stream()
+                .filter(p -> email.equals(p.getMetadata().get("user_email")))
+                .map(p -> {
+                    PaymentResponse response = new PaymentResponse();
+                    response.setPaymentId(p.getId());
+                    response.setAmount(p.getAmount());
+                    response.setMetaData(p.getMetadata());
+                    response.setCreated(p.getCreated());
+                    return response;
+                })
+                .collect(Collectors.toList());
     }
 
 //    public String createCardToken(CardRequest cardRequest) throws StripeException {
@@ -52,6 +76,7 @@ public class PaymentService {
         Map<String, Object> metadata = new HashMap<>();
         metadata.put("user_email", request.getEmail());
         metadata.put("membership_type", request.getMembershipType());
+        metadata.put("membership_type_value", request.getMembershipType().getValue());
         metadata.put("membership_type_months", request.getMembershipType().getMonths());
 
         params.put("metadata", metadata);
