@@ -71,12 +71,13 @@ public class MembershipService {
 
         User user = byId.get();
 
-        boolean membershipValid = isMembershipValid(user.getMembership());
+//        boolean membershipValid = isMembershipValid(user.getMembership());
 
         ValidateMemberResponse response = new ValidateMemberResponse();
         response.setUserEmail(user.getEmail());
         response.setMembershipCardId(user.getMembership().getId());
-        response.setValid(membershipValid);
+        System.out.println(user.getMembership().isActive());
+        response.setValid(user.getMembership().isActive());
 
         return response;
 

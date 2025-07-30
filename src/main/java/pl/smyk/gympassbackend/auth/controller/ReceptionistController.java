@@ -18,15 +18,14 @@ public class ReceptionistController {
   private final MembershipService membershipService;
   private final EntryService entryService;
 
-
   @PostMapping("/validate/{qrCodeData}")
-  @PreAuthorize("hasAuthority('ROLE_RECEPTIONIST')")
   public ResponseEntity<?> validateMembership(Authentication authentication, @PathVariable String qrCodeData) throws Exception {
     if (!authentication.isAuthenticated()) {
       return ResponseEntity.status(401).body("Unauthorized");
     }
 
     ValidateMemberResponse validateMemberResponse = membershipService.scanUserMembershipPass(qrCodeData);
+    System.out.println(validateMemberResponse);
 
     return ResponseEntity.ok(validateMemberResponse);
   }
