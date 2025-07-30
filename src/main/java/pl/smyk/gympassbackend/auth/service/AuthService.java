@@ -116,6 +116,7 @@ public class AuthService {
                 .lastName(user.getLastName())
                 .gender(user.getGender())
                 .progress(user.getProgress())
+                .profileImage(user.getProfileImage())
                 .membershipData(
                         UserDataResponse.MembershipData.builder()
                                 .active(user.getMembership().isActive())

@@ -34,6 +34,8 @@ public class User implements UserDetails {
     @Nullable
     private Membership membership;
     private Map<Achievement, Integer> progress = new HashMap<>();
+    @Nullable
+    private String profileImage;
 
     public void incrementProgress(Achievement achievement, int value) {
         int newProgress = progress.getOrDefault(achievement, 0) + value;

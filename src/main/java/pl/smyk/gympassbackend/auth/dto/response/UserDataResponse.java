@@ -20,6 +20,7 @@ public class UserDataResponse {
     private Gender gender;
     private MembershipData membershipData;
     private Map<Achievement, Integer> progress;
+    private String profileImage;
 
     @Builder
     @Getter

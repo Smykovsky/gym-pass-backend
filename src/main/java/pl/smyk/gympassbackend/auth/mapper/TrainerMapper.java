@@ -17,6 +17,7 @@ public interface TrainerMapper {
     @Mapping(source = "certifications", target = "certifications")
     @Mapping(source = "trainingTypes", target = "trainingTypes")
     @Mapping(source = "membership", target = "membership")
+    @Mapping(source = "profileImage", target = "profileImage")
     TrainerDto trainerToTrainerDto(Trainer trainer);
 
     default List<String> mapTrainingTypes(List<TrainingType> trainingTypes) {

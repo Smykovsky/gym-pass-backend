@@ -15,6 +15,7 @@ public class TrainerDto {
     private String email;
     private String firstName;
     private String lastName;
+    private String profileImage;
     private MembershipDto membership;
     private List<String> certifications;
     private List<TrainingType> trainingTypes;
