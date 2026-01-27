@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/socket.io/**")
                 .permitAll()
-                .requestMatchers("/api/auth/**")
+                .requestMatchers("/api/auth/**", "/api/test/**")
                 .permitAll()
                 .requestMatchers("/api/user/**").authenticated()
                 .requestMatchers("/api/membership/**").authenticated()
