@@ -11,10 +11,16 @@ public interface SubCommentMapper {
     SubCommentMapper INSTANCE = Mappers.getMapper(SubCommentMapper.class);
 
     @Mapping(source = "user.email", target = "userEmail")
+    @Mapping(source = "user.profileImage", target = "userProfileImage")
+    @Mapping(source = "user.firstName", target = "userFirstName")
+    @Mapping(source = "user.lastName", target = "userLastName")
     @Mapping(source = "parentCommentId", target = "parentCommentId")
     SubCommentDto subCommentToSubCommentDto(SubComment subComment);
 
     @Mapping(source = "userEmail", target = "user.email")
+    @Mapping(source = "userProfileImage", target = "user.profileImage")
+    @Mapping(source = "userFirstName", target = "user.firstName")
+    @Mapping(source = "userLastName", target = "user.lastName")
     @Mapping(source = "parentCommentId", target = "parentCommentId")
     SubComment subCommentDtoToSubComment(SubCommentDto subCommentDto);
 }

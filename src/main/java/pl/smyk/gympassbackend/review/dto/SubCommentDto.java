@@ -13,5 +13,8 @@ public class SubCommentDto {
     private String id;
     private String commentText;
     private String userEmail;
+    private String userProfileImage;
+    private String userFirstName;
+    private String userLastName;
     private String parentCommentId;
 }
