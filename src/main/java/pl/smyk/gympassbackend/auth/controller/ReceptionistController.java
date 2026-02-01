@@ -18,18 +18,22 @@ public class ReceptionistController {
   private final MembershipService membershipService;
   private final EntryService entryService;
 
-  @PostMapping("/validate/{qrCodeData}")
-  public ResponseEntity<?> validateMembership(Authentication authentication, @PathVariable String qrCodeData) throws Exception {
-    if (!authentication.isAuthenticated()) {
-      return ResponseEntity.status(401).body("Unauthorized");
+    @PostMapping("/validate")
+    public ResponseEntity<ValidateMemberResponse> validateMembership(
+            Authentication authentication,
+            @RequestBody String qrCodeData
+    ) throws Exception {
+        if (!authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+
+        qrCodeData = qrCodeData.replace("\"", "");
+
+        ValidateMemberResponse response =
+                membershipService.scanUserMembershipPass(qrCodeData);
+
+        return ResponseEntity.ok(response);
     }
-
-    ValidateMemberResponse validateMemberResponse = membershipService.scanUserMembershipPass(qrCodeData);
-    System.out.println(validateMemberResponse);
-
-    return ResponseEntity.ok(validateMemberResponse);
-  }
-
   @PostMapping("/entry")
   public ResponseEntity<?> addEntry(Authentication authentication, @RequestBody AddUserEntry entryDto) {
     if (!authentication.isAuthenticated()) {
