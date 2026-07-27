@@ -36,6 +36,8 @@ public class User implements UserDetails {
     private Map<Achievement, Integer> progress = new HashMap<>();
     @Nullable
     private String profileImage;
+    @Builder.Default
+    private boolean accountNonLocked = true;
 
     public void incrementProgress(Achievement achievement, int value) {
         int newProgress = progress.getOrDefault(achievement, 0) + value;
@@ -76,6 +78,11 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
     }
 
 }

@@ -75,9 +75,12 @@ public class MembershipService {
 
         ValidateMemberResponse response = new ValidateMemberResponse();
         response.setUserEmail(user.getEmail());
-        response.setMembershipCardId(user.getMembership().getId());
-        System.out.println(user.getMembership().isActive());
-        response.setValid(user.getMembership().isActive());
+        if (user.getMembership() != null) {
+            response.setMembershipCardId(user.getMembership().getId());
+            response.setValid(user.getMembership().isActive());
+        } else {
+            response.setValid(false);
+        }
 
         return response;
 

@@ -110,6 +110,17 @@ public class AuthService {
         }
 
         User user = byEmail.get();
+        UserDataResponse.MembershipData membershipData = null;
+        if (user.getMembership() != null) {
+            membershipData = UserDataResponse.MembershipData.builder()
+                    .active(user.getMembership().isActive())
+                    .startDate(user.getMembership().getStartDate())
+                    .endDate(user.getMembership().getEndDate())
+                    .qrCode(user.getMembership().getQrCode())
+                    .membershipType(user.getMembership().getMembershipType())
+                    .build();
+        }
+
         return UserDataResponse.builder()
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
@@ -117,14 +128,8 @@ public class AuthService {
                 .gender(user.getGender())
                 .progress(user.getProgress())
                 .profileImage(user.getProfileImage())
-                .membershipData(
-                        UserDataResponse.MembershipData.builder()
-                                .active(user.getMembership().isActive())
-                                .startDate(user.getMembership().getStartDate())
-                                .endDate(user.getMembership().getEndDate())
-                                .qrCode(user.getMembership().getQrCode())
-                                .membershipType(user.getMembership().getMembershipType())
-                                .build()).build();
+                .membershipData(membershipData)
+                .build();
     }
 
     public void updateUserData(UpdateUserDataRequest updateUserDataRequest) {
