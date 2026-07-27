@@ -124,4 +124,12 @@ public class EmailJsService {
 
         sendEmail(defaultTemplateId, params);
     }
+
+    public void sendContestWonEmail(String toEmail, String userName, String contestTitle, int months) {
+        Map<String, Object> params = createBaseParams(toEmail, userName != null ? userName : "Klubowiczu");
+        params.put("subject", "GymPass: GRATULACJE! Wygrałeś w konkursie GymPass!");
+        params.put("message", "Gratulacje " + (userName != null ? userName : "") + "! Zostałeś wylosowany jako zwycięzca w konkursie '" + contestTitle + "'. Twój karnet został automatycznie doładowany o " + months + " msc!");
+
+        sendEmail(defaultTemplateId, params);
+    }
 }
