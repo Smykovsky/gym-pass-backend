@@ -16,6 +16,7 @@ import pl.smyk.gympassbackend.member.model.Membership;
 import pl.smyk.gympassbackend.member.repository.MembershipRepository;
 import pl.smyk.gympassbackend.member.util.CodeGenerator;
 import pl.smyk.gympassbackend.training.model.TrainingType;
+import pl.smyk.gympassbackend.common.service.EmailJsService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +30,7 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
     private final MembershipRepository membershipRepository;
     private final CodeGenerator codeGenerator;
+    private final EmailJsService emailJsService;
 
     public List<AdminUserResponseDto> getAllUsers(String search, Role roleFilter, Boolean lockedFilter) {
         List<User> users = userRepository.findAll();
@@ -93,6 +95,8 @@ public class AdminService {
 
         saved.setMembership(membership);
         User finalUser = userRepository.save(saved);
+
+        emailJsService.sendWelcomeAccountCreatedEmail(finalUser.getEmail(), finalUser.getFirstName());
 
         log.info("Ręcznie utworzono konto trenera: {} (ID: {})", finalUser.getEmail(), finalUser.getId());
         return mapToAdminUserDto(finalUser);

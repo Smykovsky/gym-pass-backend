@@ -14,6 +14,9 @@ import pl.smyk.gympassbackend.training.model.ScheduledTraining;
 import pl.smyk.gympassbackend.training.model.TrainingStatus;
 import pl.smyk.gympassbackend.training.repository.ScheduledTrainingRepository;
 
+import pl.smyk.gympassbackend.auth.model.User;
+import pl.smyk.gympassbackend.auth.repository.UserRepository;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,7 +27,22 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class TrainerService {
     private final TrainerRepository trainerRepository;
+    private final UserRepository userRepository;
     private final ScheduledTrainingRepository scheduledTrainingRepository;
+
+    public List<UserDto> getClients() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(u -> {
+                    UserDto dto = new UserDto();
+                    dto.setId(u.getId());
+                    dto.setEmail(u.getEmail());
+                    dto.setFirstName(u.getFirstName() != null ? u.getFirstName() : "");
+                    dto.setLastName(u.getLastName() != null ? u.getLastName() : "");
+                    return dto;
+                })
+                .toList();
+    }
 
     //find trainer by email
     public Trainer findByEmail(String email) {

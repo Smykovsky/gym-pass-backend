@@ -31,9 +31,12 @@ import java.util.List;
 import java.util.Optional;
 
 
+import org.springframework.scheduling.annotation.EnableAsync;
+
 @SpringBootApplication
 @RequiredArgsConstructor
 @EnableMongock
+@EnableAsync
 public class GymPassBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(GymPassBackendApplication.class, args);

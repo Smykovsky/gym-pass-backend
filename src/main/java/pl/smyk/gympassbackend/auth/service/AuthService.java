@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import pl.smyk.gympassbackend.common.service.EmailJsService;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -37,6 +39,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final CodeGenerator codeGenerator;
+    private final EmailJsService emailJsService;
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -71,6 +74,9 @@ public class AuthService {
 
         savedUser.setMembership(membership);
         userRepository.save(savedUser);
+
+        // Wysyłka powitalnej wiadomości email przez EmailJS
+        emailJsService.sendWelcomeAccountCreatedEmail(savedUser.getEmail(), savedUser.getFirstName());
 
         return AuthResponse.builder().message("Rejestracja przebiegła pomyślnie!").build();
     }

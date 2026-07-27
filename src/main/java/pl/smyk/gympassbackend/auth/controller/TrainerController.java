@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.smyk.gympassbackend.auth.dto.request.UpdateTrainerProfileRequest;
 import pl.smyk.gympassbackend.auth.dto.TrainerDto;
+import pl.smyk.gympassbackend.auth.dto.UserDto;
 import pl.smyk.gympassbackend.auth.service.TrainerService;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,15 @@ public class TrainerController {
 
         List<TrainerDto> allTrainers = trainerService.getAllTrainers();
         return ResponseEntity.ok(allTrainers);
+    }
+
+    @GetMapping("/clients")
+    public ResponseEntity<List<UserDto>> getClients(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+        List<UserDto> clients = trainerService.getClients();
+        return ResponseEntity.ok(clients);
     }
 
     @GetMapping("/me")
