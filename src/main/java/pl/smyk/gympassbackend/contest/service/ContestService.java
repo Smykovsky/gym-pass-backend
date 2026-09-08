@@ -13,7 +13,8 @@ import pl.smyk.gympassbackend.contest.dto.CreateContestRequest;
 import pl.smyk.gympassbackend.contest.model.Contest;
 import pl.smyk.gympassbackend.contest.model.ContestStatus;
 import pl.smyk.gympassbackend.contest.repository.ContestRepository;
-import pl.smyk.gympassbackend.member.model.MembershipType;
+import pl.smyk.gympassbackend.member.model.MembershipPlan;
+import pl.smyk.gympassbackend.member.service.MembershipPlanService;
 import pl.smyk.gympassbackend.member.service.MembershipService;
 
 import java.security.SecureRandom;
@@ -31,19 +32,22 @@ public class ContestService {
     private final ContestRepository contestRepository;
     private final UserRepository userRepository;
     private final MembershipService membershipService;
+    private final MembershipPlanService membershipPlanService;
     private final EmailJsService emailJsService;
     private final SecureRandom random = new SecureRandom();
 
     public ContestDto createContest(CreateContestRequest request) {
         LocalDateTime now = LocalDateTime.now();
         int days = request.getDurationDays() != null && request.getDurationDays() > 0 ? request.getDurationDays() : 7;
-        MembershipType type = request.getMembershipType() != null ? request.getMembershipType() : MembershipType.QUARTERLY;
+        String prizeCode = request.getMembershipType() != null && !request.getMembershipType().isBlank()
+                ? request.getMembershipType() : "QUARTERLY";
+        MembershipPlan prizePlan = membershipPlanService.getByCodeOrDefault(prizeCode);
 
         Contest contest = Contest.builder()
                 .title(request.getTitle() != null ? request.getTitle().trim() : "Konkurs na Karnet!")
                 .description(request.getDescription() != null ? request.getDescription().trim() : "")
-                .membershipType(type)
-                .durationMonths(type.getMonths())
+                .membershipType(prizePlan.getCode())
+                .durationMonths(prizePlan.getMonths())
                 .startDate(now)
                 .endDate(now.plusDays(days))
                 .status(ContestStatus.ACTIVE)

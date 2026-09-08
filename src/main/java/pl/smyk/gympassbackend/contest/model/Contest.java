@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import pl.smyk.gympassbackend.member.model.MembershipType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,7 +24,8 @@ public class Contest {
     private String title;
     private String description;
 
-    private MembershipType membershipType;
+    /** Code of the {@link pl.smyk.gympassbackend.member.model.MembershipPlan} awarded as the prize. */
+    private String membershipType;
     private int durationMonths;
 
     private LocalDateTime startDate;

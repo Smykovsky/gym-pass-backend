@@ -21,7 +21,10 @@ public class Membership {
     private LocalDate endDate;
     private String qrCode;
     private String userId;
-    private MembershipType membershipType;
+    /** Code of the {@link MembershipPlan} this membership was last bought / renewed with. */
+    private String membershipType;
+    /** Human-readable plan name, snapshotted at purchase time. */
+    private String membershipPlanName;
 
     public void generateCodes(CodeGenerator codeGenerator, String userId) {
         try {

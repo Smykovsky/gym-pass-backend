@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.smyk.gympassbackend.contest.model.ContestStatus;
-import pl.smyk.gympassbackend.member.model.MembershipType;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +17,7 @@ public class ContestDto {
     private String id;
     private String title;
     private String description;
-    private MembershipType membershipType;
+    private String membershipType;
     private int durationMonths;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

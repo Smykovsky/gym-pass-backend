@@ -2,16 +2,16 @@ package pl.smyk.gympassbackend.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.smyk.gympassbackend.member.dto.MembershipDto;
+import pl.smyk.gympassbackend.member.dto.MembershipPlanResponse;
 import pl.smyk.gympassbackend.member.dto.UserEntriesResponse;
-import pl.smyk.gympassbackend.member.dto.ValidateMemberResponse;
 import pl.smyk.gympassbackend.member.service.EntryService;
+import pl.smyk.gympassbackend.member.service.MembershipPlanService;
 import pl.smyk.gympassbackend.member.service.MembershipService;
 
-import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/membership")
@@ -19,6 +19,7 @@ import java.util.HashMap;
 public class MembershipController {
     private final MembershipService membershipService;
     private final EntryService entryService;
+    private final MembershipPlanService membershipPlanService;
 
     @GetMapping()
     public ResponseEntity<?> getMembershipByUserEmail(Authentication authentication) {
@@ -40,5 +41,14 @@ public class MembershipController {
 
         UserEntriesResponse allUserEntries = entryService.findAllUserEntries(email);
         return ResponseEntity.ok(allUserEntries);
+    }
+
+    /** Catalogue of membership plans currently offered for sale. */
+    @GetMapping("/plans")
+    public ResponseEntity<List<MembershipPlanResponse>> getMembershipPlans() {
+        List<MembershipPlanResponse> plans = membershipPlanService.getActivePlans().stream()
+                .map(MembershipPlanResponse::from)
+                .toList();
+        return ResponseEntity.ok(plans);
     }
 }

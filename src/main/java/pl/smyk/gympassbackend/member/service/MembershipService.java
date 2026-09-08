@@ -39,6 +39,10 @@ public class MembershipService {
     }
 
     public void renewMembership(String userEmail, int months) {
+        renewMembership(userEmail, months, null, null);
+    }
+
+    public void renewMembership(String userEmail, int months, String planCode, String planName) {
         Optional<User> byEmail = userService.findByEmail(userEmail);
         if (byEmail.isEmpty()) {
             return;
@@ -52,7 +56,12 @@ public class MembershipService {
 
         membership.setStartDate(start);
         membership.setEndDate(end);
-//        membership.setActive(true);
+        if (planCode != null) {
+            membership.setMembershipType(planCode);
+        }
+        if (planName != null) {
+            membership.setMembershipPlanName(planName);
+        }
         membership.generateCodes(codeGenerator, user.getId());
 
         membershipRepository.save(user.getMembership());

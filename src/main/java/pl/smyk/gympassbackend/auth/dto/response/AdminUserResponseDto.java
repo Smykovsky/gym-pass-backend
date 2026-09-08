@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.smyk.gympassbackend.auth.model.Gender;
 import pl.smyk.gympassbackend.auth.model.Role;
-import pl.smyk.gympassbackend.member.model.MembershipType;
 import pl.smyk.gympassbackend.training.model.TrainingType;
 
 import java.time.LocalDate;
@@ -38,6 +37,6 @@ public class AdminUserResponseDto {
         private boolean active;
         private LocalDate startDate;
         private LocalDate endDate;
-        private MembershipType membershipType;
+        private String membershipType;
     }
 }

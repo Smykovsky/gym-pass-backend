@@ -12,4 +12,5 @@ public class MembershipDto {
     private LocalDate endDate;
     private String qrCode;
     private String membershipType;
+    private String membershipPlanName;
 }

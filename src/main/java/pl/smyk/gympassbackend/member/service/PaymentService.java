@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import pl.smyk.gympassbackend.member.dto.PaymentConfirmRequest;
 import pl.smyk.gympassbackend.member.dto.PaymentCreateRequest;
 import pl.smyk.gympassbackend.member.dto.PaymentResponse;
+import pl.smyk.gympassbackend.member.model.MembershipPlan;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ import pl.smyk.gympassbackend.common.service.EmailJsService;
 @RequiredArgsConstructor
 public class PaymentService {
     private final MembershipService membershipService;
+    private final MembershipPlanService membershipPlanService;
     private final EmailJsService emailJsService;
 
     private int RETRY_COUNT = 0;
@@ -70,17 +72,20 @@ public class PaymentService {
 //    }
 
     public PaymentIntent createPayment(PaymentCreateRequest request) throws StripeException {
+        MembershipPlan plan = membershipPlanService.getByCode(request.getMembershipType());
+
         Map<String, Object> params = new HashMap<>();
-        params.put("amount", (int) (request.getMembershipType().getDiscountedPrice() * 100));
+        params.put("amount", plan.finalPrice().movePointRight(2).intValueExact());
         params.put("currency", "PLN");
         params.put("payment_method_types", List.of("blik", "card"));
         params.put("confirmation_method", "manual");
 
         Map<String, Object> metadata = new HashMap<>();
         metadata.put("user_email", request.getEmail());
-        metadata.put("membership_type", request.getMembershipType());
-        metadata.put("membership_type_value", request.getMembershipType().getValue());
-        metadata.put("membership_type_months", request.getMembershipType().getMonths());
+        metadata.put("membership_plan_code", plan.getCode());
+        metadata.put("membership_type", plan.getCode());
+        metadata.put("membership_type_value", plan.getName());
+        metadata.put("membership_type_months", plan.getMonths());
 
         params.put("metadata", metadata);
 
@@ -162,9 +167,11 @@ public class PaymentService {
 
                 int membershipTypeMonths = Integer.parseInt(paymentIntent.getMetadata().get("membership_type_months"));
                 String email = paymentIntent.getMetadata().get("user_email");
+                String planCode = paymentIntent.getMetadata().get("membership_plan_code");
+                String planName = paymentIntent.getMetadata().get("membership_type_value");
 
                 if (status.equals("succeeded")) {
-                    membershipService.renewMembership(email, membershipTypeMonths);
+                    membershipService.renewMembership(email, membershipTypeMonths, planCode, planName);
                     return "success";
                 } else if (status.equals("in_process")){
                     return "in_process";
